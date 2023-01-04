@@ -247,6 +247,21 @@ def makemigrations(context, name=""):
     run_command(context, command)
 
 
+# ------------------------------------------------------------------------------
+# DOCS
+# ------------------------------------------------------------------------------
+@task
+def docs(context):
+    """Build and serve docs locally for development."""
+    command = "mkdocs serve -v"
+
+    if is_truthy(context.nautobot_device_onboarding.local):
+        print("Serving Documentation...")
+        run_command(context, command)
+    else:
+        print("Only used when developing locally (i.e. context.nautobot_device_onboarding.local=True)!")
+
+
 @task
 def migrate(context):
     """Perform migrate operation in Django."""
