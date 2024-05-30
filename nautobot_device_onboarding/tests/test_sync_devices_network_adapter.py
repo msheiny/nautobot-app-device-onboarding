@@ -6,7 +6,6 @@ from nautobot.core.testing import TransactionTestCase
 from nautobot.extras.models import JobResult
 
 from nautobot_device_onboarding.diffsync.adapters.sync_devices_adapters import SyncDevicesNetworkAdapter
-
 from nautobot_device_onboarding.jobs import SSOTSyncDevices
 from nautobot_device_onboarding.tests import utils
 from nautobot_device_onboarding.tests.fixtures import sync_devices_fixture

@@ -1,6 +1,7 @@
 """Test empty inventory creation."""
 
 import unittest
+
 from nautobot_device_onboarding.nornir_plays.empty_inventory import EmptyInventory
 
 

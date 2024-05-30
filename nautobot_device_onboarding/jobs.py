@@ -2,8 +2,8 @@
 """Device Onboarding Jobs."""
 
 import csv
-import logging
 import json
+import logging
 from io import StringIO
 
 from diffsync.enum import DiffSyncFlags
@@ -11,17 +11,18 @@ from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.forms import HiddenInput
-from nornir import InitNornir
-from nornir.core.plugins.inventory import InventoryPluginRegister
-from nautobot.apps.jobs import BooleanVar, FileVar, IntegerVar, Job, MultiObjectVar, ObjectVar, StringVar, ChoiceVar
+from nautobot.apps.jobs import BooleanVar, ChoiceVar, FileVar, IntegerVar, Job, MultiObjectVar, ObjectVar, StringVar
 from nautobot.core.celery import register_jobs
 from nautobot.dcim.models import Device, DeviceType, Location, Platform
 from nautobot.extras.choices import CustomFieldTypeChoices, SecretsGroupAccessTypeChoices, SecretsGroupSecretTypeChoices
 from nautobot.extras.models import CustomField, Role, SecretsGroup, SecretsGroupAssociation, Status
 from nautobot.ipam.models import Namespace
-from nautobot_ssot.jobs.base import DataSource
 from nautobot_plugin_nornir.constants import NORNIR_SETTINGS
+from nautobot_ssot.jobs.base import DataSource
+from nornir import InitNornir
+from nornir.core.plugins.inventory import InventoryPluginRegister
 
+from nautobot_device_onboarding.choices import SSOT_JOB_TO_COMMAND_CHOICE
 from nautobot_device_onboarding.diffsync.adapters.sync_devices_adapters import (
     SyncDevicesNautobotAdapter,
     SyncDevicesNetworkAdapter,
@@ -32,12 +33,11 @@ from nautobot_device_onboarding.diffsync.adapters.sync_network_data_adapters imp
 )
 from nautobot_device_onboarding.exceptions import OnboardException
 from nautobot_device_onboarding.netdev_keeper import NetdevKeeper
-from nautobot_device_onboarding.utils.helper import onboarding_task_fqdn_to_ip
+from nautobot_device_onboarding.nornir_plays.command_getter import _parse_credentials, netmiko_send_commands
 from nautobot_device_onboarding.nornir_plays.empty_inventory import EmptyInventory
 from nautobot_device_onboarding.nornir_plays.inventory_creator import _set_inventory
-from nautobot_device_onboarding.nornir_plays.command_getter import netmiko_send_commands, _parse_credentials
-from nautobot_device_onboarding.choices import SSOT_JOB_TO_COMMAND_CHOICE
 from nautobot_device_onboarding.nornir_plays.processor import TroubleshootingProcessor
+from nautobot_device_onboarding.utils.helper import onboarding_task_fqdn_to_ip
 
 InventoryPluginRegister.register("empty-inventory", EmptyInventory)
 

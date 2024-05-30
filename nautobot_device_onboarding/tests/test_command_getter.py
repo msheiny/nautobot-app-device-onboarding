@@ -2,7 +2,9 @@
 
 import os
 import unittest
+
 import yaml
+
 from nautobot_device_onboarding.nornir_plays.command_getter import _get_commands_to_run
 
 MOCK_DIR = os.path.join("nautobot_device_onboarding", "tests", "mock")

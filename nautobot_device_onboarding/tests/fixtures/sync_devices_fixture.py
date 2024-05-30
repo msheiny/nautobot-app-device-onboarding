@@ -17,8 +17,8 @@ sync_devices_mock_data_valid = {
         "device_type": "CSR1000V17",
         "mgmt_interface": "GigabitEthernet1",
         "manufacturer": "Cisco",
-        "platform": "cisco_xe",
-        "network_driver": "cisco_xe",
+        "platform": "cisco_ios",
+        "network_driver": "cisco_ios",
         "mask_length": 16,
     },
 }

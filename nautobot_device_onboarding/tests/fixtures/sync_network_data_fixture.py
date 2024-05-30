@@ -1,6 +1,6 @@
 """Data fixture for use in testing."""
 
-sync_network_data_mock_data = {
+sync_network_data_fixture = {
     "demo-cisco-xe1": {
         "serial": "9ABUXU581111",
         "interfaces": [
@@ -8,7 +8,7 @@ sync_network_data_mock_data = {
                 "GigabitEthernet1": {
                     "type": "100base-tx",
                     "ip_addresses": [
-                        {"ip_address": "10.1.1.8", "prefix_length": 16},
+                        {"ip_address": "10.1.1.10", "prefix_length": 16},
                     ],
                     "mac_address": "d8b1.905c.7130",
                     "mtu": "1500",
@@ -25,7 +25,7 @@ sync_network_data_mock_data = {
                 "GigabitEthernet2": {
                     "type": "100base-tx",
                     "ip_addresses": [
-                        {"ip_address": "10.1.1.9", "prefix_length": 24},
+                        {"ip_address": "10.1.1.1", "prefix_length": 24},
                     ],
                     "mac_address": "d8b1.905c.7131",
                     "mtu": "1500",
@@ -42,8 +42,8 @@ sync_network_data_mock_data = {
                 "GigabitEthernet3": {
                     "type": "100base-tx",
                     "ip_addresses": [
-                        {"ip_address": "10.1.1.10", "prefix_length": 24},
-                        {"ip_address": "10.1.1.11", "prefix_length": 22},
+                        {"ip_address": "10.1.1.2", "prefix_length": 24},
+                        {"ip_address": "10.1.1.3", "prefix_length": 22},
                     ],
                     "mac_address": "d8b1.905c.7132",
                     "mtu": "1500",
@@ -60,7 +60,7 @@ sync_network_data_mock_data = {
                 "GigabitEthernet4": {
                     "type": "100base-tx",
                     "ip_addresses": [
-                        {"ip_address": "10.1.1.12", "prefix_length": 20},
+                        {"ip_address": "10.1.1.4", "prefix_length": 20},
                     ],
                     "mac_address": "d8b1.905c.7133",
                     "mtu": "1500",
@@ -111,7 +111,7 @@ sync_network_data_mock_data = {
                 "GigabitEthernet1": {
                     "type": "100base-tx",
                     "ip_addresses": [
-                        {"ip_address": "10.1.2.8", "prefix_length": 24},
+                        {"ip_address": "10.1.1.11", "prefix_length": 24},
                     ],
                     "mac_address": "d8b1.905c.5170",
                     "mtu": "1500",
@@ -128,7 +128,7 @@ sync_network_data_mock_data = {
                 "GigabitEthernet2": {
                     "type": "100base-tx",
                     "ip_addresses": [
-                        {"ip_address": "10.1.2.9", "prefix_length": 24},
+                        {"ip_address": "10.1.1.12", "prefix_length": 24},
                     ],
                     "mac_address": "d8b1.905c.5171",
                     "mtu": "1500",
@@ -145,8 +145,8 @@ sync_network_data_mock_data = {
                 "GigabitEthernet3": {
                     "type": "100base-tx",
                     "ip_addresses": [
-                        {"ip_address": "10.1.2.10", "prefix_length": 24},
-                        {"ip_address": "10.1.2.11", "prefix_length": 22},
+                        {"ip_address": "10.1.1.13", "prefix_length": 24},
+                        {"ip_address": "10.1.1.14", "prefix_length": 22},
                     ],
                     "mac_address": "d8b1.905c.5172",
                     "mtu": "1500",
