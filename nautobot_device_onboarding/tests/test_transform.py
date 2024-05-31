@@ -1,17 +1,16 @@
 """Testing the transform helpers."""
 
 import os
+import tempfile
 import unittest
 from unittest import mock
-import tempfile
+
 import yaml
-from nautobot.extras.models import GitRepository, JobResult
 from nautobot.core.jobs import GitRepositorySync
-from nautobot.core.testing import (
-    TransactionTestCase,
-    run_job_for_testing,
-)
+from nautobot.core.testing import TransactionTestCase, run_job_for_testing
 from nautobot.extras.choices import JobResultStatusChoices
+from nautobot.extras.models import GitRepository, JobResult
+
 from nautobot_device_onboarding.nornir_plays.transform import add_platform_parsing_info, load_command_mappers_from_dir
 
 MOCK_DIR = os.path.join("nautobot_device_onboarding", "tests", "mock")

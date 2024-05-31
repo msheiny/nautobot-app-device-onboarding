@@ -2,8 +2,10 @@
 
 import unittest
 from unittest.mock import patch
+
 from nautobot.dcim.models import Platform
-from nautobot_device_onboarding.nornir_plays.inventory_creator import guess_netmiko_device_type, _set_inventory
+
+from nautobot_device_onboarding.nornir_plays.inventory_creator import _set_inventory, guess_netmiko_device_type
 
 
 class TestInventoryCreator(unittest.TestCase):

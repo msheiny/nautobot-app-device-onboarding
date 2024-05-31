@@ -49,7 +49,7 @@ namespace.configure(
     {
         "nautobot_device_onboarding": {
             "nautobot_ver": "2.2.3",
-            "project_name": "nautobot-device-onboarding",
+            "project_name": "nautobot-device-onboarding-2",
             "python_ver": "3.11",
             "local": False,
             "compose_dir": os.path.join(os.path.dirname(__file__), "development"),
@@ -765,7 +765,9 @@ def unittest(
 @task
 def unittest_coverage(context):
     """Report on code test coverage as measured by 'invoke unittest'."""
-    command = "coverage report --skip-covered --include 'nautobot_device_onboarding/*' --omit *migrations*"
+    command = (
+        "coverage report --skip-covered --include 'nautobot_device_onboarding/*' --omit '*/migrations/*','*/tests/*'"
+    )
 
     run_command(context, command)
 

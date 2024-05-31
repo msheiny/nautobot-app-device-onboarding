@@ -1,8 +1,8 @@
 """Command Extraction and Formatting or SSoT Based Jobs."""
 
 import json
-from json.decoder import JSONDecodeError
 import logging
+from json.decoder import JSONDecodeError
 
 from django.template import engines
 from django.utils.module_loading import import_string

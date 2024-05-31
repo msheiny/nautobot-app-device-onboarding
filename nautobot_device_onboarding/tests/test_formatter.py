@@ -1,13 +1,14 @@
 """Test for nornir plays in command_getter."""
 
-import os
 import json
+import os
 import unittest
 from unittest.mock import patch
 import yaml
 from nautobot.core.testing import TransactionTestCase
 from nornir.core.inventory import ConnectionOptions, Host, Defaults
-from nautobot_device_onboarding.nornir_plays.formatter import perform_data_extraction, extract_and_post_process
+
+from nautobot_device_onboarding.nornir_plays.formatter import extract_and_post_process, perform_data_extraction
 from nautobot_device_onboarding.nornir_plays.transform import add_platform_parsing_info
 
 MOCK_DIR = os.path.join("nautobot_device_onboarding", "tests", "mock")

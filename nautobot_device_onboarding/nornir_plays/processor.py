@@ -1,7 +1,8 @@
 """Processor used by Nornir command getter tasks to prep data for SSoT framework sync and to catch unknown errors."""
 
 from typing import Dict
-from jsonschema import validate, ValidationError
+
+from jsonschema import ValidationError, validate
 from nornir.core.inventory import Host
 from nornir.core.task import MultiResult, Task
 from nornir_nautobot.plugins.processors import BaseLoggingProcessor

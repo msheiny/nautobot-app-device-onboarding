@@ -1,94 +1,129 @@
 """Utilities for easier testing."""
 
 from django.contrib.contenttypes.models import ContentType
-from nautobot.dcim.models import (
-    Device,
-    Interface,
-    Location,
-    LocationType,
-)
+from nautobot.dcim.choices import InterfaceTypeChoices
+from nautobot.dcim.models import Device, DeviceType, Interface, Location, LocationType, Manufacturer, Platform
 from nautobot.extras.choices import SecretsGroupAccessTypeChoices, SecretsGroupSecretTypeChoices
 from nautobot.extras.models import Role, Secret, SecretsGroup, SecretsGroupAssociation, Status
-from nautobot.ipam.models import IPAddress, Namespace, Prefix
+from nautobot.ipam.choices import IPAddressTypeChoices, PrefixTypeChoices
+from nautobot.ipam.models import IPAddress, IPAddressToInterface, Namespace, Prefix
 
 
-# TODO Update this for testing Network Importer
-# def sync_network_data_ensure_required_nautobot_objects():
-#     """Ensure the requied Nautobot objects needed for testing exist."""
-#     status, _ = Status.objects.get_or_create(name="Active")
-#     status.content_types.add(ContentType.objects.get_for_model(Device))
-#     status.content_types.add(ContentType.objects.get_for_model(Prefix))
-#     status.content_types.add(ContentType.objects.get_for_model(IPAddress))
-#     status.content_types.add(ContentType.objects.get_for_model(Location))
-#     status.content_types.add(ContentType.objects.get_for_model(Interface))
-#     status.content_types.add(ContentType.objects.get_for_model(Interface))
-#     status.validated_save()
+def sync_network_data_ensure_required_nautobot_objects():
+    """Ensure the requied Nautobot objects needed for testing exist."""
+    testing_objects = {}
 
-#     username_secret, _ = Secret.objects.get_or_create(
-#         name="username", provider="environment-variable", parameters={"variable": "DEVICE_USER"}
-#     )
-#     password_secret, _ = Secret.objects.get_or_create(
-#         name="password", provider="environment-variable", parameters={"variable": "DEVICE_PASS"}
-#     )
-#     secrets_group, _ = SecretsGroup.objects.get_or_create(name="test secrets group")
-#     SecretsGroupAssociation.objects.get_or_create(
-#         secrets_group=secrets_group,
-#         secret=username_secret,
-#         access_type=SecretsGroupAccessTypeChoices.TYPE_GENERIC,
-#         secret_type=SecretsGroupSecretTypeChoices.TYPE_USERNAME,
-#     )
-#     SecretsGroupAssociation.objects.get_or_create(
-#         secrets_group=secrets_group,
-#         secret=password_secret,
-#         access_type=SecretsGroupAccessTypeChoices.TYPE_GENERIC,
-#         secret_type=SecretsGroupSecretTypeChoices.TYPE_PASSWORD,
-#     )
+    status, _ = Status.objects.get_or_create(name="Active")
+    status.content_types.add(ContentType.objects.get_for_model(Device))
+    status.content_types.add(ContentType.objects.get_for_model(Prefix))
+    status.content_types.add(ContentType.objects.get_for_model(IPAddress))
+    status.content_types.add(ContentType.objects.get_for_model(Location))
+    status.content_types.add(ContentType.objects.get_for_model(Interface))
+    status.content_types.add(ContentType.objects.get_for_model(Interface))
+    status.validated_save()
 
-#     namespace, _ = Namespace.objects.get_or_create(name="Global")
+    username_secret, _ = Secret.objects.get_or_create(
+        name="username", provider="environment-variable", parameters={"variable": "DEVICE_USER"}
+    )
+    password_secret, _ = Secret.objects.get_or_create(
+        name="password", provider="environment-variable", parameters={"variable": "DEVICE_PASS"}
+    )
+    secrets_group, _ = SecretsGroup.objects.get_or_create(name="test secrets group")
+    SecretsGroupAssociation.objects.get_or_create(
+        secrets_group=secrets_group,
+        secret=username_secret,
+        access_type=SecretsGroupAccessTypeChoices.TYPE_GENERIC,
+        secret_type=SecretsGroupSecretTypeChoices.TYPE_USERNAME,
+    )
+    SecretsGroupAssociation.objects.get_or_create(
+        secrets_group=secrets_group,
+        secret=password_secret,
+        access_type=SecretsGroupAccessTypeChoices.TYPE_GENERIC,
+        secret_type=SecretsGroupSecretTypeChoices.TYPE_PASSWORD,
+    )
 
-#     prefix, _ = Prefix.objects.get_or_create(
-#         prefix="1.1.1.0/24",
-#         namespace=namespace,
-#         type=PrefixTypeChoices.TYPE_NETWORK,
-#         status=status,
-#     )
-#     ip_address, _ = IPAddress.objects.get_or_create(
-#         host="1.1.1.1", mask_length=24, type=IPAddressTypeChoices.TYPE_HOST, status=status
-#     )
+    namespace, _ = Namespace.objects.get_or_create(name="Global")
 
-#     location_type, _ = LocationType.objects.get_or_create(name="Site")
-#     location_type.content_types.add(ContentType.objects.get_for_model(Device))
-#     location_type.validated_save()
-#     location, _ = Location.objects.get_or_create(name="Site A", location_type=location_type, status=status)
+    prefix, _ = Prefix.objects.get_or_create(
+        prefix="10.1.1.0/24",
+        namespace=namespace,
+        type=PrefixTypeChoices.TYPE_NETWORK,
+        status=status,
+    )
+    ip_address_1, _ = IPAddress.objects.get_or_create(
+        host="10.1.1.10", mask_length=24, type=IPAddressTypeChoices.TYPE_HOST, status=status
+    )
+    ip_address_2, _ = IPAddress.objects.get_or_create(
+        host="10.1.1.11", mask_length=24, type=IPAddressTypeChoices.TYPE_HOST, status=status
+    )
+    location_type, _ = LocationType.objects.get_or_create(name="Site")
+    location_type.content_types.add(ContentType.objects.get_for_model(Device))
+    location_type.validated_save()
+    location, _ = Location.objects.get_or_create(name="Site A", location_type=location_type, status=status)
 
-#     device_role, _ = Role.objects.get_or_create(name="Network")
-#     device_role.content_types.add(ContentType.objects.get_for_model(Device))
-#     device_role.validated_save()
+    device_role, _ = Role.objects.get_or_create(name="Network")
+    device_role.content_types.add(ContentType.objects.get_for_model(Device))
+    device_role.validated_save()
 
-#     manufacturer, _ = Manufacturer.objects.get_or_create(name="Cisco")
+    manufacturer, _ = Manufacturer.objects.get_or_create(name="Cisco")
 
-#     platform, _ = Platform.objects.get_or_create(
-#         name="cisco_ios", network_driver="cisco_ios", manufacturer=manufacturer
-#     )
+    platform_1, _ = Platform.objects.get_or_create(
+        name="cisco_ios", network_driver="cisco_ios", manufacturer=manufacturer
+    )
+    platform_2, _ = Platform.objects.get_or_create(
+        name="cisco_ios", network_driver="cisco_ios", manufacturer=manufacturer
+    )
 
-#     device_type, _ = DeviceType.objects.get_or_create(model="test_model_123", manufacturer=manufacturer)
-#     device, _ = Device.objects.get_or_create(
-#         name="test_device",
-#         serial="ABC123456EF",
-#         device_type=device_type,
-#         status=status,
-#         location=location,
-#         role=device_role,
-#         platform=platform,
-#         secrets_group=secrets_group,
-#     )
-#     interface, _ = Interface.objects.get_or_create(
-#         device=device, name="int0", status=status, type=InterfaceTypeChoices.TYPE_VIRTUAL
-#     )
-#     ip_address_to_interface, _ = IPAddressToInterface.objects.get_or_create(interface=interface, ip_address=ip_address)
-#     device.primary_ip4 = ip_address
-#     device.validated_save()
-#     return True
+    device_type, _ = DeviceType.objects.get_or_create(model="CSR1000V17", manufacturer=manufacturer)
+    device_1, _ = Device.objects.get_or_create(
+        name="demo-cisco-xe1",
+        serial="9ABUXU581111",
+        device_type=device_type,
+        status=status,
+        location=location,
+        role=device_role,
+        platform=platform_1,
+        secrets_group=secrets_group,
+    )
+    device_2, _ = Device.objects.get_or_create(
+        name="demo-cisco-xe2",
+        serial="9ABUXU5882222",
+        device_type=device_type,
+        status=status,
+        location=location,
+        role=device_role,
+        platform=platform_2,
+        secrets_group=secrets_group,
+    )
+    interface_1, _ = Interface.objects.get_or_create(
+        device=device_1, name="GigabitEthernet1", status=status, type=InterfaceTypeChoices.TYPE_VIRTUAL
+    )
+    interface_2, _ = Interface.objects.get_or_create(
+        device=device_2, name="GigabitEthernet1", status=status, type=InterfaceTypeChoices.TYPE_VIRTUAL
+    )
+    IPAddressToInterface.objects.get_or_create(interface=interface_1, ip_address=ip_address_1)
+    device_1.primary_ip4 = ip_address_1
+    device_1.validated_save()
+
+    IPAddressToInterface.objects.get_or_create(interface=interface_2, ip_address=ip_address_2)
+    device_2.primary_ip4 = ip_address_2
+    device_2.validated_save()
+
+    testing_objects["status"] = status
+    testing_objects["secrets_group"] = secrets_group
+    testing_objects["namespace"] = namespace
+    testing_objects["location"] = location
+    testing_objects["device_role"] = device_role
+    testing_objects["device_type"] = device_type
+    testing_objects["platform_1"] = platform_1
+    testing_objects["platform_2"] = platform_2
+    testing_objects["prefix"] = prefix
+    testing_objects["ip_address_1"] = ip_address_1
+    testing_objects["ip_address_2"] = ip_address_2
+    testing_objects["device_1"] = device_1
+    testing_objects["device_2"] = device_2
+
+    return testing_objects
 
 
 def sync_devices_ensure_required_nautobot_objects():
