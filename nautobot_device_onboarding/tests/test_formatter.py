@@ -5,7 +5,6 @@ import os
 import unittest
 from unittest.mock import patch
 import yaml
-from nautobot.core.testing import TransactionTestCase
 from nornir.core.inventory import ConnectionOptions, Host, Defaults
 
 from nautobot_device_onboarding.nornir_plays.formatter import extract_and_post_process, perform_data_extraction
@@ -144,7 +143,7 @@ class TestFormatterExtractAndProcess(unittest.TestCase):
             None,
             False,
         )
-        expected_parsed_result = (["CAT1451S15C"], "CAT1451S15C")
+        expected_parsed_result = (["FOC2341Y2CQ"], "FOC2341Y2CQ")
         self.assertEqual(expected_parsed_result, actual_result)
 
     def test_extract_and_post_process_result_json_string(self):
@@ -262,21 +261,19 @@ class TestFormatterExtractAndProcess(unittest.TestCase):
     def test_extract_and_post_process_result_pre_processor(self):
         parsed_command_output = [
             {
-            "access_vlan": "10",
-            "admin_mode": "trunk",
-            "interface": "Gi1/8",
-            "mode": "down (suspended member of bundle Po8)",
-            "native_vlan": "10",
-            "switchport": "Enabled",
-            "switchport_monitor": "",
-            "switchport_negotiation": "Off",
-            "trunking_vlans": [
-                "10"
-            ],
-            "voice_vlan": "none"
-        }
+                "access_vlan": "10",
+                "admin_mode": "trunk",
+                "interface": "Gi1/8",
+                "mode": "down (suspended member of bundle Po8)",
+                "native_vlan": "10",
+                "switchport": "Enabled",
+                "switchport_monitor": "",
+                "switchport_negotiation": "Off",
+                "trunking_vlans": ["10"],
+                "voice_vlan": "none",
+            }
         ]
-        vlan_map_post_processed = {'1': {'vlan_name': 'default'}, '10': {'vlan_name': '10.39.110.0/25.LAN'}}
+        vlan_map_post_processed = {"1": {"vlan_name": "default"}, "10": {"vlan_name": "10.39.110.0/25.LAN"}}
         actual_result = extract_and_post_process(
             parsed_command_output,
             {
@@ -285,15 +282,26 @@ class TestFormatterExtractAndProcess(unittest.TestCase):
                 "jpath": "[?interface=='{{ current_key | abbreviated_interface_name }}'].{admin_mode: admin_mode, mode: mode, access_vlan: access_vlan, trunking_vlans: trunking_vlans}",
                 "post_processor": "{{ obj | get_vlan_data(vlan_map) | tojson }}",
             },
-            {"obj": "1.1.1.1", "original_host": "1.1.1.1", "vlan_map": vlan_map_post_processed, "current_key": "GigabitEthernet1/8"},
+            {
+                "obj": "1.1.1.1",
+                "original_host": "1.1.1.1",
+                "vlan_map": vlan_map_post_processed,
+                "current_key": "GigabitEthernet1/8",
+            },
             None,
             False,
         )
-        expected_parsed_result = ([{'access_vlan': '10',
-           'admin_mode': 'trunk',
-           'mode': 'down (suspended member of bundle Po8)',
-           'trunking_vlans': ['10']}],
-         [{'id': 10, 'name': '10.39.110.0/25.LAN'}])
+        expected_parsed_result = (
+            [
+                {
+                    "access_vlan": "10",
+                    "admin_mode": "trunk",
+                    "mode": "down (suspended member of bundle Po8)",
+                    "trunking_vlans": ["10"],
+                }
+            ],
+            [{"id": 10, "name": "10.39.110.0/25.LAN"}],
+        )
         self.assertEqual(expected_parsed_result, actual_result)
 
     def test_extract_and_post_process_result_list_to_string_vios(self):
