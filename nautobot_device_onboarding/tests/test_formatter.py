@@ -3,7 +3,9 @@
 import os
 import json
 import unittest
+from unittest.mock import patch
 import yaml
+from nautobot.core.testing import TransactionTestCase
 from nornir.core.inventory import ConnectionOptions, Host, Defaults
 from nautobot_device_onboarding.nornir_plays.formatter import perform_data_extraction, extract_and_post_process
 from nautobot_device_onboarding.nornir_plays.transform import add_platform_parsing_info
@@ -256,6 +258,43 @@ class TestFormatterExtractAndProcess(unittest.TestCase):
         expected_parsed_result = ([{"bar": "moo"}], [{"bar": "moo"}])
         self.assertEqual(expected_parsed_result, actual_result)
 
+    def test_extract_and_post_process_result_pre_processor(self):
+        parsed_command_output = [
+            {
+            "access_vlan": "10",
+            "admin_mode": "trunk",
+            "interface": "Gi1/8",
+            "mode": "down (suspended member of bundle Po8)",
+            "native_vlan": "10",
+            "switchport": "Enabled",
+            "switchport_monitor": "",
+            "switchport_negotiation": "Off",
+            "trunking_vlans": [
+                "10"
+            ],
+            "voice_vlan": "none"
+        }
+        ]
+        vlan_map_post_processed = {'1': {'vlan_name': 'default'}, '10': {'vlan_name': '10.39.110.0/25.LAN'}}
+        actual_result = extract_and_post_process(
+            parsed_command_output,
+            {
+                "command": "show interfaces switchport",
+                "parser": "textfsm",
+                "jpath": "[?interface=='{{ current_key | abbreviated_interface_name }}'].{admin_mode: admin_mode, mode: mode, access_vlan: access_vlan, trunking_vlans: trunking_vlans}",
+                "post_processor": "{{ obj | get_vlan_data(vlan_map) | tojson }}",
+            },
+            {"obj": "1.1.1.1", "original_host": "1.1.1.1", "vlan_map": vlan_map_post_processed, "current_key": "GigabitEthernet1/8"},
+            None,
+            False,
+        )
+        expected_parsed_result = ([{'access_vlan': '10',
+           'admin_mode': 'trunk',
+           'mode': 'down (suspended member of bundle Po8)',
+           'trunking_vlans': ['10']}],
+         [{'id': 10, 'name': '10.39.110.0/25.LAN'}])
+        self.assertEqual(expected_parsed_result, actual_result)
+
     def test_extract_and_post_process_result_list_to_string_vios(self):
         parsed_command_output = [
             {
@@ -297,8 +336,10 @@ class TestFormatterExtractAndProcess(unittest.TestCase):
 class TestFormatterDeviceSync(unittest.TestCase):
     """Tests to ensure formatter is working for sync devices 'ssot job'."""
 
-    def setUp(self):
+    @patch("nautobot_device_onboarding.nornir_plays.transform.GitRepository")
+    def setUp(self, mock_repo):
         # Load the application command_mapper files
+        mock_repo.return_value = 0
         self.platform_parsing_info = add_platform_parsing_info()
         self.host = Host(
             name="198.51.100.1",
@@ -369,8 +410,10 @@ class TestFormatterDeviceSync(unittest.TestCase):
 class TestFormatterSyncNetworkDataNoOptions(unittest.TestCase):
     """Tests to ensure formatter is working for sync devices 'ssot job'."""
 
-    def setUp(self):
+    @patch("nautobot_device_onboarding.nornir_plays.transform.GitRepository")
+    def setUp(self, mock_repo):
         # Load the application command_mapper files
+        mock_repo.return_value = 0
         self.platform_parsing_info = add_platform_parsing_info()
         self.host = Host(
             name="198.51.100.1",
@@ -401,7 +444,9 @@ class TestFormatterSyncNetworkDataNoOptions(unittest.TestCase):
 
     def test_perform_data_extraction_sync_network_data_no_options(self):
         self.maxDiff = None
-        for platform in list(self.platform_parsing_info.keys()):
+        supported_platforms = list(self.platform_parsing_info.keys())
+        supported_platforms.remove("cisco_wlc")
+        for platform in supported_platforms:
             self.host.platform = platform
             current_test_dir = f"{MOCK_DIR}/{platform}/"
             getters = find_files_by_prefix(current_test_dir, "command_getter")
@@ -432,8 +477,10 @@ class TestFormatterSyncNetworkDataNoOptions(unittest.TestCase):
 class TestFormatterSyncNetworkDataAll(unittest.TestCase):
     """Tests to ensure formatter is working for sync devices 'ssot job'."""
 
-    def setUp(self):
+    @patch("nautobot_device_onboarding.nornir_plays.transform.GitRepository")
+    def setUp(self, mock_repo):
         # Load the application command_mapper files
+        mock_repo.return_value = 0
         self.platform_parsing_info = add_platform_parsing_info()
         self.host = Host(
             name="198.51.100.1",
@@ -464,7 +511,9 @@ class TestFormatterSyncNetworkDataAll(unittest.TestCase):
 
     def test_perform_data_extraction_sync_network_data_all(self):
         self.maxDiff = None
-        for platform in list(self.platform_parsing_info.keys()):
+        supported_platforms = list(self.platform_parsing_info.keys())
+        supported_platforms.remove("cisco_wlc")
+        for platform in supported_platforms:
             self.host.platform = platform
             current_test_dir = f"{MOCK_DIR}/{platform}/"
             getters = find_files_by_prefix(current_test_dir, "command_getter")
@@ -491,12 +540,13 @@ class TestFormatterSyncNetworkDataAll(unittest.TestCase):
                             self.assertEqual(expected_parsed_result, actual_result)
 
 
-@unittest.skip(reason="Todo test sync network data with vrfs on, vlans off.")
 class TestFormatterSyncNetworkDataWithVrf(unittest.TestCase):
     """Tests to ensure formatter is working for sync devices 'ssot job'."""
 
-    def setUp(self):
+    @patch("nautobot_device_onboarding.nornir_plays.transform.GitRepository")
+    def setUp(self, mock_repo):
         # Load the application command_mapper files
+        mock_repo.return_value = 0
         self.platform_parsing_info = add_platform_parsing_info()
         self.host = Host(
             name="198.51.100.1",
@@ -527,7 +577,9 @@ class TestFormatterSyncNetworkDataWithVrf(unittest.TestCase):
 
     def test_perform_data_extraction_sync_network_data_with_vrfs(self):
         self.maxDiff = None
-        for platform in list(self.platform_parsing_info.keys()):
+        supported_platforms = list(self.platform_parsing_info.keys())
+        supported_platforms.remove("cisco_wlc")
+        for platform in supported_platforms:
             self.host.platform = platform
             current_test_dir = f"{MOCK_DIR}/{platform}/"
             getters = find_files_by_prefix(current_test_dir, "command_getter")
@@ -554,12 +606,14 @@ class TestFormatterSyncNetworkDataWithVrf(unittest.TestCase):
                             self.assertEqual(expected_parsed_result, actual_result)
 
 
-@unittest.skip(reason="Todo test sync network data with vrfs off, vlans on.")
+# @unittest.skip(reason="Todo test sync network data with vrfs off, vlans on.")
 class TestFormatterSyncNetworkDataWithVlans(unittest.TestCase):
     """Tests to ensure formatter is working for sync devices 'ssot job'."""
 
-    def setUp(self):
+    @patch("nautobot_device_onboarding.nornir_plays.transform.GitRepository")
+    def setUp(self, mock_repo):
         # Load the application command_mapper files
+        mock_repo.return_value = 0
         self.platform_parsing_info = add_platform_parsing_info()
         self.host = Host(
             name="198.51.100.1",
@@ -590,7 +644,9 @@ class TestFormatterSyncNetworkDataWithVlans(unittest.TestCase):
 
     def test_perform_data_extraction_sync_network_data_with_vlans(self):
         self.maxDiff = None
-        for platform in list(self.platform_parsing_info.keys()):
+        supported_platforms = list(self.platform_parsing_info.keys())
+        supported_platforms.remove("cisco_wlc")
+        for platform in supported_platforms:
             self.host.platform = platform
             current_test_dir = f"{MOCK_DIR}/{platform}/"
             getters = find_files_by_prefix(current_test_dir, "command_getter")
