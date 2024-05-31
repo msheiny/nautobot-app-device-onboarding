@@ -68,17 +68,17 @@ def interface_mode_logic(item):  # pylint: disable=too-many-return-statements
 
 
 @library.filter
-def get_vlan_data(item):
+def get_vlan_data(item, vlan_mapping):
     """Get vlan information from an item."""
     int_mode = interface_mode_logic(item)
     if int_mode:
         if int_mode == "access":
             # {id: vlan_id, name: vlan_name}
-            return [{"id": item[0]["access_vlan"], "name": ""}]
+            return [{"id": item[0]["access_vlan"], "name": vlan_mapping[item[0]["access_vlan"]]["vlan_name"]}]
         if int_mode == "tagged-all":
             return []
         return [
-            {"id": vid, "name": ""}
+            {"id": vid, "name": vlan_mapping[item[0]["access_vlan"]]["vlan_name"]}
             for vid in list(
                 chain.from_iterable([vlanconfig_to_list(vlan_stanza) for vlan_stanza in item[0]["trunking_vlans"]])
             )

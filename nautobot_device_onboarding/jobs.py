@@ -733,6 +733,8 @@ class DeviceOnboardingTroubleshootingJob(Job):
                     nornir_obj.inventory.hosts.update(single_host_inventory_constructed)
                 nr_with_processors = nornir_obj.with_processors([TroubleshootingProcessor(compiled_results)])
                 if kwargs["ssot_job_type"] == "both":
+                    nornir_obj.inventory.defaults.data.update({"sync_vrfs": True})
+                    nornir_obj.inventory.defaults.data.update({"sync_vlans": True})
                     nr_with_processors.run(
                         task=netmiko_send_commands,
                         command_getter_yaml_data=nornir_obj.inventory.defaults.data["platform_parsing_info"],
@@ -746,6 +748,9 @@ class DeviceOnboardingTroubleshootingJob(Job):
                         **kwargs,
                     )
                 else:
+                    if kwargs["ssot_job_type"] == "sync_network_data":
+                        nornir_obj.inventory.defaults.data.update({"sync_vrfs": True})
+                        nornir_obj.inventory.defaults.data.update({"sync_vlans": True})
                     nr_with_processors.run(
                         task=netmiko_send_commands,
                         command_getter_yaml_data=nornir_obj.inventory.defaults.data["platform_parsing_info"],
