@@ -5,6 +5,7 @@
             "hostname": "veos-0"
         }
     ],
+    "show ip interface | json": {},
     "show interfaces | json": {
         "interfaces": {
             "Ethernet1": {

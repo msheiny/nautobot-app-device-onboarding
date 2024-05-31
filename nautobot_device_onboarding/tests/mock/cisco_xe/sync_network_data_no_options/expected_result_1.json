@@ -1,85 +1,1028 @@
-{"interfaces": {"GigabitEthernet0/0": {"802.1Q_mode": "",
-                                       "description": "",
-                                       "ip_addresses": [{"ip_address": "",
-                                                         "prefix_length": ""}],
-                                       "lag": [],
-                                       "link_status": "False",
-                                       "mac_address": "fa16.3e57.336f",
-                                       "mtu": "1500",
-                                       "type": "other"},
-                "GigabitEthernet0/1": {"802.1Q_mode": "tagged-all",
-                                       "description": "to iosvl2-2",
-                                       "ip_addresses": [{"ip_address": "",
-                                                         "prefix_length": ""}],
-                                       "lag": "Port-channel1",
-                                       "link_status": "True",
-                                       "mac_address": "fa16.3e4f.41cc",
-                                       "mtu": "1500",
-                                       "type": "other"},
-                "GigabitEthernet0/2": {"802.1Q_mode": "access",
-                                       "description": ["to iosvl2-4", "Port"],
-                                       "ip_addresses": [{"ip_address": "",
-                                                         "prefix_length": ""},
-                                                        {"ip_address": "",
-                                                         "prefix_length": ""}],
-                                       "lag": "Port-channel1",
-                                       "link_status": "True",
-                                       "mac_address": ["fa16.3ea3.3e49",
-                                                       "78da.6eaf.3b82"],
-                                       "mtu": ["1500", "1500"],
-                                       "type": "other"},
-                "GigabitEthernet0/3": {"802.1Q_mode": "",
-                                       "description": "to iosvl2-3",
-                                       "ip_addresses": [{"ip_address": "",
-                                                         "prefix_length": ""}],
-                                       "lag": [],
-                                       "link_status": "True",
-                                       "mac_address": "fa16.3e31.2c47",
-                                       "mtu": "1500",
-                                       "type": "other"},
-                "GigabitEthernet1/0": {"802.1Q_mode": "",
-                                       "description": "to iosvl2-3",
-                                       "ip_addresses": [{"ip_address": "",
-                                                         "prefix_length": ""}],
-                                       "lag": "Port-channel3",
-                                       "link_status": "True",
-                                       "mac_address": "fa16.3ec8.50ab",
-                                       "mtu": "1500",
-                                       "type": "other"},
-                "Loopback0": {"802.1Q_mode": "",
-                              "description": "Loopback",
-                              "ip_addresses": [{"ip_address": "",
-                                                "prefix_length": ""}],
-                              "lag": [],
-                              "link_status": "True",
-                              "mac_address": "",
-                              "mtu": "1514",
-                              "type": "other"},
-                "Port-channel1": {"802.1Q_mode": "",
-                                  "description": "",
-                                  "ip_addresses": [{"ip_address": "",
-                                                    "prefix_length": ""}],
-                                  "lag": [],
-                                  "link_status": "False",
-                                  "mac_address": "fa16.3e4f.41cc",
-                                  "mtu": "1500",
-                                  "type": "lag"},
-                "Port-channel3": {"802.1Q_mode": "",
-                                  "description": "",
-                                  "ip_addresses": [{"ip_address": "",
-                                                    "prefix_length": ""}],
-                                  "lag": [],
-                                  "link_status": "False",
-                                  "mac_address": "fa16.3e4f.41c2",
-                                  "mtu": "1500",
-                                  "type": "lag"},
-                "Vlan1": {"802.1Q_mode": "",
-                          "description": "OOB Management",
-                          "ip_addresses": [{"ip_address": "198.51.100.1",
-                                            "prefix_length": "16"}],
-                          "lag": [],
-                          "link_status": "True",
-                          "mac_address": "fa16.3e57.8001",
-                          "mtu": "1500",
-                          "type": "virtual"}},
- "serial": "CAT1451S15C"}
+{
+    "interfaces": {
+        "GigabitEthernet0/0": {
+            "802.1Q_mode": "",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "198.51.100.1",
+                    "prefix_length": "28"
+                }
+            ],
+            "lag": [],
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.95c0",
+            "mtu": "1500",
+            "type": "other"
+        },
+        "HundredGigE1/0/25": {
+            "802.1Q_mode": "access",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.95d9",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "HundredGigE1/0/26": {
+            "802.1Q_mode": "access",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.95da",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "HundredGigE1/0/27": {
+            "802.1Q_mode": "",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "False",
+            "mac_address": "8c94.1fcd.95db",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "HundredGigE1/0/28": {
+            "802.1Q_mode": "",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "False",
+            "mac_address": "8c94.1fcd.95dc",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "HundredGigE2/0/25": {
+            "802.1Q_mode": "access",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.d1d9",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "HundredGigE2/0/26": {
+            "802.1Q_mode": "access",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.d1da",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "HundredGigE2/0/27": {
+            "802.1Q_mode": "",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "False",
+            "mac_address": "8c94.1fcd.d1db",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "HundredGigE2/0/28": {
+            "802.1Q_mode": "",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "False",
+            "mac_address": "8c94.1fcd.d1dc",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "Port-channel11": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.95c2",
+            "mtu": "9216",
+            "type": "lag"
+        },
+        "Port-channel12": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.95c3",
+            "mtu": "9216",
+            "type": "lag"
+        },
+        "Port-channel13": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.d1cb",
+            "mtu": "9216",
+            "type": "lag"
+        },
+        "Port-channel14": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.d1cd",
+            "mtu": "9216",
+            "type": "lag"
+        },
+        "Port-channel21": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.d1c1",
+            "mtu": "9216",
+            "type": "lag"
+        },
+        "Port-channel22": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.d1c3",
+            "mtu": "9216",
+            "type": "lag"
+        },
+        "Port-channel23": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.95cc",
+            "mtu": "9216",
+            "type": "lag"
+        },
+        "Port-channel24": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.95ce",
+            "mtu": "9216",
+            "type": "lag"
+        },
+        "Port-channel25": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "False",
+            "mac_address": "0000.0000.0000",
+            "mtu": "9216",
+            "type": "lag"
+        },
+        "Port-channel30": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.95d2",
+            "mtu": "9216",
+            "type": "lag"
+        },
+        "TwentyFiveGigE1/0/1": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": "Port-channel11",
+            "link_status": "False",
+            "mac_address": "8c94.1fcd.95c1",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE1/0/10": {
+            "802.1Q_mode": "",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "False",
+            "mac_address": "8c94.1fcd.95ca",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE1/0/11": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": "Port-channel13",
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.95cb",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE1/0/12": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": "Port-channel23",
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.95cc",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE1/0/13": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": "Port-channel14",
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.95cd",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE1/0/14": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": "Port-channel24",
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.95ce",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE1/0/15": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.95cf",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE1/0/16": {
+            "802.1Q_mode": "",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "False",
+            "mac_address": "8c94.1fcd.95d0",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE1/0/17": {
+            "802.1Q_mode": "",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "False",
+            "mac_address": "8c94.1fcd.95d1",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE1/0/18": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": "Port-channel30",
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.95d2",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE1/0/19": {
+            "802.1Q_mode": "",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "False",
+            "mac_address": "8c94.1fcd.95d3",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE1/0/2": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": "Port-channel11",
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.95c2",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE1/0/20": {
+            "802.1Q_mode": "",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "False",
+            "mac_address": "8c94.1fcd.95d4",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE1/0/21": {
+            "802.1Q_mode": "",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "False",
+            "mac_address": "8c94.1fcd.95d5",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE1/0/22": {
+            "802.1Q_mode": "",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "False",
+            "mac_address": "8c94.1fcd.95d6",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE1/0/23": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.95d7",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE1/0/24": {
+            "802.1Q_mode": "access",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.95d8",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE1/0/3": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": "Port-channel12",
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.95c3",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE1/0/4": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": "Port-channel12",
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.95c4",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE1/0/5": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.95c5",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE1/0/6": {
+            "802.1Q_mode": "access",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "False",
+            "mac_address": "8c94.1fcd.95c6",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE1/0/7": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.95c7",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE1/0/8": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.95c8",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE1/0/9": {
+            "802.1Q_mode": "",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "False",
+            "mac_address": "8c94.1fcd.95c9",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE2/0/1": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": "Port-channel21",
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.d1c1",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE2/0/10": {
+            "802.1Q_mode": "",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "False",
+            "mac_address": "8c94.1fcd.d1ca",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE2/0/11": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": "Port-channel13",
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.d1cb",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE2/0/12": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": "Port-channel23",
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.d1cc",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE2/0/13": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": "Port-channel14",
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.d1cd",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE2/0/14": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": "Port-channel24",
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.d1ce",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE2/0/15": {
+            "802.1Q_mode": "",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "False",
+            "mac_address": "8c94.1fcd.d1cf",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE2/0/16": {
+            "802.1Q_mode": "",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "False",
+            "mac_address": "8c94.1fcd.d1d0",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE2/0/17": {
+            "802.1Q_mode": "",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "False",
+            "mac_address": "8c94.1fcd.d1d1",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE2/0/18": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": "Port-channel30",
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.d1d2",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE2/0/19": {
+            "802.1Q_mode": "",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "False",
+            "mac_address": "8c94.1fcd.d1d3",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE2/0/2": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": "Port-channel21",
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.d1c2",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE2/0/20": {
+            "802.1Q_mode": "",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "False",
+            "mac_address": "8c94.1fcd.d1d4",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE2/0/21": {
+            "802.1Q_mode": "",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "False",
+            "mac_address": "8c94.1fcd.d1d5",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE2/0/22": {
+            "802.1Q_mode": "",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "False",
+            "mac_address": "8c94.1fcd.d1d6",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE2/0/23": {
+            "802.1Q_mode": "",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "False",
+            "mac_address": "8c94.1fcd.d1d7",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE2/0/24": {
+            "802.1Q_mode": "access",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.d1d8",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE2/0/3": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": "Port-channel22",
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.d1c3",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE2/0/4": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": "Port-channel22",
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.d1c4",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE2/0/5": {
+            "802.1Q_mode": "",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "False",
+            "mac_address": "8c94.1fcd.d1c5",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE2/0/6": {
+            "802.1Q_mode": "",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "False",
+            "mac_address": "8c94.1fcd.d1c6",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE2/0/7": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.d1c7",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE2/0/8": {
+            "802.1Q_mode": "tagged",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "True",
+            "mac_address": "8c94.1fcd.d1c8",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "TwentyFiveGigE2/0/9": {
+            "802.1Q_mode": "",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "False",
+            "mac_address": "8c94.1fcd.d1c9",
+            "mtu": "9216",
+            "type": "other"
+        },
+        "Vlan1": {
+            "802.1Q_mode": "",
+            "description": "a description",
+            "ip_addresses": [
+                {
+                    "ip_address": "",
+                    "prefix_length": ""
+                }
+            ],
+            "lag": [],
+            "link_status": "False",
+            "mac_address": "8c94.1fcd.965f",
+            "mtu": "9216",
+            "type": "virtual"
+        }
+    },
+    "serial": [
+        "FDO24340K4L",
+        "FDO243411LS"
+    ]
+}
