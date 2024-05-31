@@ -7,7 +7,7 @@ from nautobot.core.testing import TestCase
 from nautobot.ipam.models import IPAddress, Prefix
 
 from nautobot_device_onboarding.tests import utils
-from nautobot_device_onboarding.tests.fixtures.sync_network_data_fixture import sync_network_data_fixture
+from nautobot_device_onboarding.tests.fixtures import sync_network_data_fixture
 from nautobot_device_onboarding.utils.diffsync_utils import (
     check_data_type,
     generate_device_queryset_from_command_getter_result,
@@ -24,7 +24,7 @@ class TestDiffSyncUtils(TestCase):
         """Initialize test case."""
         # Setup Nautobot Objectsself.
         self.testing_objects = utils.sync_network_data_ensure_required_nautobot_objects()
-        self.command_getter_result = sync_network_data_fixture
+        self.command_getter_result = sync_network_data_fixture.sync_network_mock_data_valid
         self.processed_csv_data = {
             "10.1.1.10": {
                 "location": self.testing_objects["location"],

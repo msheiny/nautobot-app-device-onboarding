@@ -371,12 +371,10 @@ class SyncNetworkDataNetworkAdapter(diffsync.DiffSync):
             self.job.logger.debug(f"HOSTNAME: {hostname}, DATA: {data}")
 
     def execute_command_getter(self):
-        """Start the CommandGetterDO job to query devices for data."""
+        """Query devices for data."""
         result = sync_network_data_command_getter(
             self.job.job_result, self.job.logger.getEffectiveLevel(), self.job.job_result.task_kwargs
         )
-        # if self.job.debug:
-        #     self.job.logger.debug(f"Command Getter Result: {result}")
         # verify data returned is a dict
         data_type_check = diffsync_utils.check_data_type(result)
         if self.job.debug:
@@ -414,12 +412,12 @@ class SyncNetworkDataNetworkAdapter(diffsync.DiffSync):
                 network_interface = self.load_interface(hostname, interface_name, interface_data)
                 network_device.add_child(network_interface)
 
-    def _get_vlan_name(self, interface_data):
-        """Given interface data returned from a device, process and return the vlan name."""
-        vlan_name = ""
-        if self.job.sync_vlans:
-            vlan_name = interface_data["untagged_vlan"]["name"] if interface_data["untagged_vlan"] else ""
-        return vlan_name
+    # def _get_vlan_name(self, interface_data):
+    #     """Given interface data returned from a device, process and return the vlan name."""
+    #     vlan_name = ""
+    #     if self.job.sync_vlans:
+    #         vlan_name = interface_data["untagged_vlan"]["name"] if interface_data["untagged_vlan"] else ""
+    #     return vlan_name
 
     def load_interface(self, hostname, interface_name, interface_data):
         """Load an interface into the DiffSync store."""
@@ -434,7 +432,7 @@ class SyncNetworkDataNetworkAdapter(diffsync.DiffSync):
             description=interface_data["description"],
             enabled=interface_data["link_status"],
             mode=interface_data["802.1Q_mode"],
-            untagged_vlan__name=self._get_vlan_name(interface_data=interface_data),
+            # untagged_vlan__name=self._get_vlan_name(interface_data=interface_data),
         )
         self.add(network_interface)
         return network_interface
