@@ -63,6 +63,7 @@ sync_network_mock_data_valid = {
                 "lag": "",
                 "untagged_vlan": {},
                 "tagged_vlans": [],
+                "vrf": {},
             },
             "Po1": {
                 "type": "lag",

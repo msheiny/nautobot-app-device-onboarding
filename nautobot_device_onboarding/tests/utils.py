@@ -1,12 +1,12 @@
 """Testing utilites."""
 
 from django.contrib.contenttypes.models import ContentType
-from nautobot.dcim.choices import InterfaceTypeChoices
+from nautobot.dcim.choices import InterfaceTypeChoices, InterfaceModeChoices
 from nautobot.dcim.models import Device, DeviceType, Interface, Location, LocationType, Manufacturer, Platform
 from nautobot.extras.choices import SecretsGroupAccessTypeChoices, SecretsGroupSecretTypeChoices
 from nautobot.extras.models import Role, Secret, SecretsGroup, SecretsGroupAssociation, Status
 from nautobot.ipam.choices import IPAddressTypeChoices, PrefixTypeChoices
-from nautobot.ipam.models import IPAddress, IPAddressToInterface, Namespace, Prefix
+from nautobot.ipam.models import IPAddress, IPAddressToInterface, Namespace, Prefix, VLAN, VRF
 
 
 def sync_network_data_ensure_required_nautobot_objects():
@@ -20,6 +20,8 @@ def sync_network_data_ensure_required_nautobot_objects():
     status.content_types.add(ContentType.objects.get_for_model(Location))
     status.content_types.add(ContentType.objects.get_for_model(Interface))
     status.content_types.add(ContentType.objects.get_for_model(Interface))
+    status.content_types.add(ContentType.objects.get_for_model(VLAN))
+    status.content_types.add(ContentType.objects.get_for_model(VRF))
     status.validated_save()
 
     username_secret, _ = Secret.objects.get_or_create(
@@ -61,6 +63,7 @@ def sync_network_data_ensure_required_nautobot_objects():
     )
     location_type, _ = LocationType.objects.get_or_create(name="Site")
     location_type.content_types.add(ContentType.objects.get_for_model(Device))
+    location_type.content_types.add(ContentType.objects.get_for_model(VLAN))
     location_type.validated_save()
     location, _ = Location.objects.get_or_create(name="Site A", location_type=location_type, status=status)
 
@@ -76,6 +79,11 @@ def sync_network_data_ensure_required_nautobot_objects():
     platform_2, _ = Platform.objects.get_or_create(
         name="cisco_xe", network_driver="cisco_xe", manufacturer=manufacturer
     )
+
+    vlan_1, _ = VLAN.objects.get_or_create(vid=40, name="vlan40", location=location, status=status)
+    vlan_2, _ = VLAN.objects.get_or_create(vid=50, name="vlan50", location=location, status=status)
+    vrf_1, _ = VRF.objects.get_or_create(name="mgmt", namespace=namespace)
+    vrf_2, _ = VRF.objects.get_or_create(name="vrf2", namespace=namespace)
 
     device_type, _ = DeviceType.objects.get_or_create(model="CSR1000V17", manufacturer=manufacturer)
     device_1, _ = Device.objects.get_or_create(
@@ -111,6 +119,9 @@ def sync_network_data_ensure_required_nautobot_objects():
     interface_1, _ = Interface.objects.get_or_create(
         device=device_1, name="GigabitEthernet1", status=status, type=InterfaceTypeChoices.TYPE_VIRTUAL
     )
+    interface_1.mode = InterfaceModeChoices.MODE_TAGGED
+    interface_1.tagged_vlans.add(vlan_1)
+    interface_1.validated_save()
     interface_2, _ = Interface.objects.get_or_create(
         device=device_2, name="GigabitEthernet1", status=status, type=InterfaceTypeChoices.TYPE_VIRTUAL
     )
@@ -145,6 +156,10 @@ def sync_network_data_ensure_required_nautobot_objects():
     testing_objects["device_1"] = device_1
     testing_objects["device_2"] = device_2
     testing_objects["device_3"] = device_3
+    testing_objects["vlan_1"] = vlan_1
+    testing_objects["vlan_2"] = vlan_2
+    testing_objects["vrf_1"] = vrf_1
+    testing_objects["vrf_2"] = vrf_2
 
     return testing_objects
 
@@ -262,5 +277,58 @@ def sync_devices_ensure_required_nautobot_objects():
     testing_objects["ip_address_2"] = ip_address_2
     testing_objects["device_1"] = device_1
     testing_objects["device_2"] = device_2
+
+    return testing_objects
+
+
+def sync_devices_ensure_required_nautobot_objects__jobs_testing():
+    """Ensure the requied Nautobot objects needed for testing exist."""
+    testing_objects = {}
+
+    status, _ = Status.objects.get_or_create(name="Active")
+    status.content_types.add(ContentType.objects.get_for_model(Device))
+    status.content_types.add(ContentType.objects.get_for_model(Prefix))
+    status.content_types.add(ContentType.objects.get_for_model(IPAddress))
+    status.content_types.add(ContentType.objects.get_for_model(Location))
+    status.content_types.add(ContentType.objects.get_for_model(Interface))
+    status.content_types.add(ContentType.objects.get_for_model(Interface))
+    status.validated_save()
+
+    username_secret, _ = Secret.objects.get_or_create(
+        name="username", provider="environment-variable", parameters={"variable": "DEVICE_USER"}
+    )
+    password_secret, _ = Secret.objects.get_or_create(
+        name="password", provider="environment-variable", parameters={"variable": "DEVICE_PASS"}
+    )
+    secrets_group, _ = SecretsGroup.objects.get_or_create(name="test secrets group")
+    SecretsGroupAssociation.objects.get_or_create(
+        secrets_group=secrets_group,
+        secret=username_secret,
+        access_type=SecretsGroupAccessTypeChoices.TYPE_GENERIC,
+        secret_type=SecretsGroupSecretTypeChoices.TYPE_USERNAME,
+    )
+    SecretsGroupAssociation.objects.get_or_create(
+        secrets_group=secrets_group,
+        secret=password_secret,
+        access_type=SecretsGroupAccessTypeChoices.TYPE_GENERIC,
+        secret_type=SecretsGroupSecretTypeChoices.TYPE_PASSWORD,
+    )
+
+    namespace, _ = Namespace.objects.get_or_create(name="Global")
+
+    location_type, _ = LocationType.objects.get_or_create(name="Site")
+    location_type.content_types.add(ContentType.objects.get_for_model(Device))
+    location_type.validated_save()
+    location, _ = Location.objects.get_or_create(name="Site A", location_type=location_type, status=status)
+
+    device_role, _ = Role.objects.get_or_create(name="Network")
+    device_role.content_types.add(ContentType.objects.get_for_model(Device))
+    device_role.validated_save()
+
+    testing_objects["status"] = status
+    testing_objects["secrets_group"] = secrets_group
+    testing_objects["namespace"] = namespace
+    testing_objects["location"] = location
+    testing_objects["device_role"] = device_role
 
     return testing_objects

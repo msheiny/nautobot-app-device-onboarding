@@ -110,6 +110,7 @@ class SyncNetworkDataNautobotAdapter(FilteredNautobotAdapter):
                 self.job.logger.warning(
                     f"{network_ip_address} is already loaded to the DiffSync store. This is a duplicate IP Address."
                 )
+        return ip_address_hosts
 
     def load_vlans(self):
         """
