@@ -49,9 +49,6 @@ class SSOTSyncDevicesTestCase(TransactionTestCase):
         job_result = create_job_result_and_run_job(
             module="nautobot_device_onboarding.jobs", name="SSOTSyncDevices", **job_form_inputs
         )
-        job_logs = [log.message for log in JobLogEntry.objects.filter(job_result=job_result)]
-        print(job_logs)
-        print(job_result.result)
 
         self.assertEqual(job_result.status, JobResultStatusChoices.STATUS_SUCCESS)
         self.assertEqual(2, Device.objects.all().count())
@@ -106,9 +103,6 @@ class SSOTSyncNetworkDataTestCase(TransactionTestCase):
         job_result = create_job_result_and_run_job(
             module="nautobot_device_onboarding.jobs", name="SSOTSyncNetworkData", **job_form_inputs
         )
-        job_logs = [log.message for log in JobLogEntry.objects.filter(job_result=job_result)]
-        print(job_logs)
-        print(job_result.result)
 
         self.assertEqual(job_result.status, JobResultStatusChoices.STATUS_SUCCESS)
         for returned_device_hostname, device_data in device_data.return_value.items():
