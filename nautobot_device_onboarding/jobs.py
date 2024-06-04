@@ -709,7 +709,7 @@ class DeviceOnboardingTroubleshootingJob(Job):
         has_sensitive_variables = False
         hidden = True
 
-    def run(self, *args, **kwargs):
+    def run(self, *args, **kwargs):  # pragma: no cover
         """Process onboarding task from ssot-ni job."""
         ip_addresses = kwargs["ip_addresses"].replace(" ", "").split(",")
         port = kwargs["port"]

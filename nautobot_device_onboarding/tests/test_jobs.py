@@ -1,13 +1,14 @@
 """Test Jobs."""
 
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
+from nautobot.extras.models.jobs import JobLogEntry
 
 from nautobot.apps.testing import create_job_result_and_run_job
 from nautobot.core.testing import TransactionTestCase
-from nautobot.dcim.models import Device, Interface
+from nautobot.dcim.models import Device, Interface, Platform, Manufacturer
 from nautobot.extras.choices import JobResultStatusChoices
-from nautobot.extras.models import JobLogEntry
 from nautobot_device_onboarding.tests.fixtures import sync_devices_fixture, sync_network_data_fixture
+from nautobot_device_onboarding import jobs
 
 from nautobot_device_onboarding.tests import utils
 
@@ -31,7 +32,7 @@ class SSOTSyncDevicesTestCase(TransactionTestCase):
             "debug": True,
             "dryrun": False,
             "csv_file": None,
-            "location": self.testing_objects["location"].pk,
+            "location": self.testing_objects["location_1"].pk,
             "namespace": self.testing_objects["namespace"].pk,
             "ip_addresses": "10.1.1.10,10.1.1.11",
             "port": 22,
@@ -66,6 +67,60 @@ class SSOTSyncDevicesTestCase(TransactionTestCase):
             mgmt_interface = Interface.objects.get(device=device, name=device_data["mgmt_interface"])
             self.assertEqual(mgmt_interface.mgmt_only, True)
             self.assertIn(returned_device_ip, list(mgmt_interface.ip_addresses.all().values_list("host", flat=True)))
+
+    def test_process_csv_data(self):
+        """Test processing of CSV file used for onboarding jobs."""
+
+        manufacturer, _ = Manufacturer.objects.get_or_create(name="Cisco")
+        platform, _ = Platform.objects.get_or_create(
+            name="cisco_ios", network_driver="cisco_ios", manufacturer=manufacturer
+        )
+        onboarding_job = jobs.SSOTSyncDevices()
+        with open("nautobot_device_onboarding/tests/fixtures/onboarding_csv_fixture.csv", "rb") as csv_file:
+            processed_csv_data = onboarding_job._process_csv_data(csv_file=csv_file)
+        self.assertEqual(processed_csv_data["10.1.1.10"]["location"], self.testing_objects["location_1"])
+        self.assertEqual(processed_csv_data["10.1.1.10"]["namespace"], self.testing_objects["namespace"])
+        self.assertEqual(processed_csv_data["10.1.1.10"]["port"], 22)
+        self.assertEqual(processed_csv_data["10.1.1.10"]["timeout"], 30)
+        self.assertEqual(processed_csv_data["10.1.1.10"]["set_mgmt_only"], True)
+        self.assertEqual(processed_csv_data["10.1.1.10"]["update_devices_without_primary_ip"], True)
+        self.assertEqual(processed_csv_data["10.1.1.10"]["device_role"], self.testing_objects["device_role"])
+        self.assertEqual(processed_csv_data["10.1.1.10"]["device_status"], self.testing_objects["status"])
+        self.assertEqual(processed_csv_data["10.1.1.10"]["interface_status"], self.testing_objects["status"])
+        self.assertEqual(processed_csv_data["10.1.1.10"]["ip_address_status"], self.testing_objects["status"])
+        self.assertEqual(processed_csv_data["10.1.1.10"]["secrets_group"], self.testing_objects["secrets_group"])
+        self.assertEqual(processed_csv_data["10.1.1.10"]["platform"], platform)
+
+        self.assertEqual(processed_csv_data["10.1.1.11"]["location"], self.testing_objects["location_2"])
+        self.assertEqual(processed_csv_data["10.1.1.11"]["namespace"], self.testing_objects["namespace"])
+        self.assertEqual(processed_csv_data["10.1.1.11"]["port"], 22)
+        self.assertEqual(processed_csv_data["10.1.1.11"]["timeout"], 30)
+        self.assertEqual(processed_csv_data["10.1.1.11"]["set_mgmt_only"], False)
+        self.assertEqual(processed_csv_data["10.1.1.11"]["update_devices_without_primary_ip"], False)
+        self.assertEqual(processed_csv_data["10.1.1.11"]["device_role"], self.testing_objects["device_role"])
+        self.assertEqual(processed_csv_data["10.1.1.11"]["device_status"], self.testing_objects["status"])
+        self.assertEqual(processed_csv_data["10.1.1.11"]["interface_status"], self.testing_objects["status"])
+        self.assertEqual(processed_csv_data["10.1.1.11"]["ip_address_status"], self.testing_objects["status"])
+        self.assertEqual(processed_csv_data["10.1.1.11"]["secrets_group"], self.testing_objects["secrets_group"])
+        self.assertEqual(processed_csv_data["10.1.1.11"]["platform"], platform)
+
+    def test_process_csv_data__bad_file(self):
+        """Test error checking of a bad CSV file used for onboarding jobs."""
+        manufacturer, _ = Manufacturer.objects.get_or_create(name="Cisco")
+        platform, _ = Platform.objects.get_or_create(
+            name="cisco_ios", network_driver="cisco_ios", manufacturer=manufacturer
+        )
+        onboarding_job = jobs.SSOTSyncDevices()
+        with open("nautobot_device_onboarding/tests/fixtures/onboarding_csv_fixture_bad_data.csv", "rb") as csv_file:
+            processed_csv_data = onboarding_job._process_csv_data(csv_file=csv_file)
+        self.assertEqual(processed_csv_data, None)
+
+    def test_process_csv_data__empty_file(self):
+        """Test error checking of a bad CSV file used for onboarding jobs."""
+        onboarding_job = jobs.SSOTSyncDevices()
+        with open("nautobot_device_onboarding/tests/fixtures/onboarding_csv_fixture_empty.csv", "rb") as csv_file:
+            processed_csv_data = onboarding_job._process_csv_data(csv_file=csv_file)
+        self.assertEqual(processed_csv_data, None)
 
 
 class SSOTSyncNetworkDataTestCase(TransactionTestCase):

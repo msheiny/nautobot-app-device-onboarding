@@ -316,10 +316,23 @@ def sync_devices_ensure_required_nautobot_objects__jobs_testing():
 
     namespace, _ = Namespace.objects.get_or_create(name="Global")
 
+    location_type__parent, _ = LocationType.objects.get_or_create(name="Region")
     location_type, _ = LocationType.objects.get_or_create(name="Site")
     location_type.content_types.add(ContentType.objects.get_for_model(Device))
     location_type.validated_save()
-    location, _ = Location.objects.get_or_create(name="Site A", location_type=location_type, status=status)
+
+    location_1_parent, _ = Location.objects.get_or_create(
+        name="Site A Parent", location_type=location_type__parent, status=status
+    )
+    location_1, _ = Location.objects.get_or_create(
+        name="Site A", parent=location_1_parent, location_type=location_type, status=status
+    )
+    location_2_parent, _ = Location.objects.get_or_create(
+        name="Site B Parent", location_type=location_type__parent, status=status
+    )
+    location_2, _ = Location.objects.get_or_create(
+        name="Site B", parent=location_2_parent, location_type=location_type, status=status
+    )
 
     device_role, _ = Role.objects.get_or_create(name="Network")
     device_role.content_types.add(ContentType.objects.get_for_model(Device))
@@ -328,7 +341,8 @@ def sync_devices_ensure_required_nautobot_objects__jobs_testing():
     testing_objects["status"] = status
     testing_objects["secrets_group"] = secrets_group
     testing_objects["namespace"] = namespace
-    testing_objects["location"] = location
+    testing_objects["location_1"] = location_1
+    testing_objects["location_2"] = location_2
     testing_objects["device_role"] = device_role
 
     return testing_objects

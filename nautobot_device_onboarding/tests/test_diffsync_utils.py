@@ -1,7 +1,6 @@
 """Test Cisco Support adapter."""
 
-import json
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 from nautobot.core.testing import TestCase
 from nautobot.ipam.models import IPAddress, Prefix
@@ -37,7 +36,6 @@ class TestDiffSyncUtils(TestCase):
                 "device_status": self.testing_objects["status"],
                 "interface_status": self.testing_objects["status"],
                 "ip_address_status": self.testing_objects["status"],
-                "device_status": self.testing_objects["status"],
                 "secrets_group": self.testing_objects["secrets_group"],
                 "platform": self.testing_objects["platform_1"],
             },
@@ -52,7 +50,6 @@ class TestDiffSyncUtils(TestCase):
                 "device_status": self.testing_objects["status"],
                 "interface_status": self.testing_objects["status"],
                 "ip_address_status": self.testing_objects["status"],
-                "device_status": self.testing_objects["status"],
                 "secrets_group": self.testing_objects["secrets_group"],
                 "platform": self.testing_objects["platform_2"],
             },
