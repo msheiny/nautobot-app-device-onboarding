@@ -1,6 +1,7 @@
 """Test Filters for Jinja2 PostProcessing."""
 
 import unittest
+import unittest.mock
 from nautobot_device_onboarding.jinja_filters import (
     map_interface_type,
     extract_prefix,
@@ -91,15 +92,141 @@ class TestJinjaFilters(unittest.TestCase):
         """Take a dict with a key and return its object."""
         self.assertEqual(get_entry_from_dict({"foo": "bar"}, "baz"), "")
 
-    @unittest.skip("TODO")
-    def test_interface_mode_logic(self):
+    def test_interface_mode_logic_access(self):
         """Logic to translate network modes to nautobot mode."""
-        pass
+        expected_value = "access"
+        actual_value = interface_mode_logic(
+            [{"admin_mode": "access", "mode": "access", "access_vlan": "1", "trunking_vlans": "10"}]
+        )
+        self.assertEqual(expected_value, actual_value)
 
-    @unittest.skip("TODO")
-    def test_get_vlan_data(self):
+    def test_interface_mode_logic_trunk_tagged_all_str(self):
+        """Logic to translate network modes to nautobot mode."""
+        expected_value = "tagged-all"
+        actual_value = interface_mode_logic(
+            [{"admin_mode": "trunk", "mode": "trunk", "access_vlan": "1", "trunking_vlans": "ALL"}]
+        )
+        self.assertEqual(expected_value, actual_value)
+
+    def test_interface_mode_logic_trunk_tagged_range_str(self):
+        """Logic to translate network modes to nautobot mode."""
+        expected_value = "tagged-all"
+        actual_value = interface_mode_logic(
+            [{"admin_mode": "trunk", "mode": "trunk", "access_vlan": "1", "trunking_vlans": "1-4094"}]
+        )
+        self.assertEqual(expected_value, actual_value)
+
+    def test_interface_mode_logic_trunk_tagged_all_list(self):
+        """Logic to translate network modes to nautobot mode."""
+        expected_value = "tagged-all"
+        actual_value = interface_mode_logic(
+            [{"admin_mode": "trunk", "mode": "trunk", "access_vlan": "1", "trunking_vlans": ["ALL"]}]
+        )
+        self.assertEqual(expected_value, actual_value)
+
+    def test_interface_mode_logic_trunk_tagged_range_list(self):
+        """Logic to translate network modes to nautobot mode."""
+        expected_value = "tagged-all"
+        actual_value = interface_mode_logic(
+            [{"admin_mode": "trunk", "mode": "trunk", "access_vlan": "1", "trunking_vlans": ["1-4094"]}]
+        )
+        self.assertEqual(expected_value, actual_value)
+
+    def test_interface_mode_logic_trunk_single_tagged(self):
+        """Logic to translate network modes to nautobot mode."""
+        expected_value = "tagged"
+        actual_value = interface_mode_logic(
+            [{"admin_mode": "trunk", "mode": "trunk", "access_vlan": "1", "trunking_vlans": ["10"]}]
+        )
+        self.assertEqual(expected_value, actual_value)
+
+    def test_interface_mode_logic_dynamic_access(self):
+        """Logic to translate network modes to nautobot mode."""
+        expected_value = "access"
+        actual_value = interface_mode_logic(
+            [{"admin_mode": "dynamic", "mode": "access", "access_vlan": "1", "trunking_vlans": ["10"]}]
+        )
+        self.assertEqual(expected_value, actual_value)
+
+    def test_interface_mode_logic_dynamic_trunk_all(self):
+        """Logic to translate network modes to nautobot mode."""
+        expected_value = "tagged-all"
+        actual_value = interface_mode_logic(
+            [{"admin_mode": "dynamic", "mode": "trunk", "access_vlan": "1", "trunking_vlans": ["ALL"]}]
+        )
+        self.assertEqual(expected_value, actual_value)
+
+    def test_interface_mode_logic_dynamic_trunk_single(self):
+        """Logic to translate network modes to nautobot mode."""
+        expected_value = "tagged"
+        actual_value = interface_mode_logic(
+            [{"admin_mode": "dynamic", "mode": "trunk", "access_vlan": "1", "trunking_vlans": "10"}]
+        )
+        self.assertEqual(expected_value, actual_value)
+
+    @unittest.mock.patch("nautobot_device_onboarding.jinja_filters.interface_mode_logic")
+    def test_get_vlan_data_empty_item_data(self, mock_mode):
         """Get vlan information from an item."""
-        pass
+        mock_mode.return_value = "access"
+        expected_value = []
+        actual_value = get_vlan_data([], [])
+        self.assertEqual(expected_value, actual_value)
+
+    @unittest.mock.patch("nautobot_device_onboarding.jinja_filters.interface_mode_logic")
+    def test_get_vlan_data_tagged_all_tagged_all(self, mock_mode):
+        """Get vlan information from an item."""
+        mock_mode.return_value = "tagged-all"
+        expected_value = []
+        actual_value = get_vlan_data([{"access_vlan": "10", "trunking_vlans": ["ALL"]}], [{"10": "VLAN0010"}])
+        self.assertEqual(expected_value, actual_value)
+
+    @unittest.mock.patch("nautobot_device_onboarding.jinja_filters.interface_mode_logic")
+    def test_get_vlan_data_tagged_all_tagged_range(self, mock_mode):
+        """Get vlan information from an item."""
+        mock_mode.return_value = "tagged-all"
+        expected_value = []
+        actual_value = get_vlan_data([{"access_vlan": "10", "trunking_vlans": ["1-4094"]}], {"10": "VLAN0010"})
+        self.assertEqual(expected_value, actual_value)
+
+    @unittest.mock.patch("nautobot_device_onboarding.jinja_filters.interface_mode_logic")
+    def test_get_vlan_data_access_create_defined_name(self, mock_mode):
+        """Get vlan information from an item."""
+        mock_mode.return_value = "access"
+        expected_value = [{"id": "10", "name": "DATA"}]
+        actual_value = get_vlan_data([{"access_vlan": "10", "trunking_vlans": ["1-4094"]}], {"10": "DATA"})
+        self.assertEqual(expected_value, actual_value)
+
+    @unittest.mock.patch("nautobot_device_onboarding.jinja_filters.interface_mode_logic")
+    def test_get_vlan_data_access_tagged_vlans_defined_trunking_as_list(self, mock_mode):
+        """Get vlan information from an item."""
+        mock_mode.return_value = "tagged"
+        expected_value = [{"id": "10", "name": "DATA"}]
+        actual_value = get_vlan_data([{"access_vlan": "10", "trunking_vlans": ["10"]}], {"10": "DATA"})
+        self.assertEqual(expected_value, actual_value)
+
+    @unittest.mock.patch("nautobot_device_onboarding.jinja_filters.interface_mode_logic")
+    def test_get_vlan_data_access_tagged_vlans_defined_trunking_as_str(self, mock_mode):
+        """Get vlan information from an item."""
+        mock_mode.return_value = "tagged"
+        expected_value = [{"id": "10", "name": "DATA"}]
+        actual_value = get_vlan_data([{"access_vlan": "10", "trunking_vlans": "10"}], {"10": "DATA"})
+        self.assertEqual(expected_value, actual_value)
+
+    @unittest.mock.patch("nautobot_device_onboarding.jinja_filters.interface_mode_logic")
+    def test_get_vlan_data_access_tagged_vlans_no_name_trunking_as_list(self, mock_mode):
+        """Get vlan information from an item."""
+        mock_mode.return_value = "tagged"
+        expected_value = [{"id": "12", "name": "VLAN0012"}]
+        actual_value = get_vlan_data([{"access_vlan": "10", "trunking_vlans": ["12"]}], {"10": "DATA"})
+        self.assertEqual(expected_value, actual_value)
+
+    @unittest.mock.patch("nautobot_device_onboarding.jinja_filters.interface_mode_logic")
+    def test_get_vlan_data_access_tagged_vlans_no_name_trunking_as_str(self, mock_mode):
+        """Get vlan information from an item."""
+        mock_mode.return_value = "tagged"
+        expected_value = [{"id": "12", "name": "VLAN0012"}]
+        actual_value = get_vlan_data([{"access_vlan": "10", "trunking_vlans": "12"}], {"10": "DATA"})
+        self.assertEqual(expected_value, actual_value)
 
     def test_parse_junos_ip_address_values_as_list_single(self):
         """Parse Junos IP and destination prefix."""

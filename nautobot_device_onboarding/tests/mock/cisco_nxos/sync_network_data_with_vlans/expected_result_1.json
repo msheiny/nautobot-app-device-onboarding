@@ -42,23 +42,23 @@
             "mtu": "9216",
             "tagged_vlans": [
                 {
-                    "id": 68,
+                    "id": "68",
                     "name": "vlan68"
                 },
                 {
-                    "id": 215,
+                    "id": "215",
                     "name": "vmware"
                 },
                 {
-                    "id": 216,
+                    "id": "216",
                     "name": "VLAN0216"
                 },
                 {
-                    "id": 219,
+                    "id": "219",
                     "name": "v219"
                 },
                 {
-                    "id": 3030,
+                    "id": "3030",
                     "name": "storage"
                 }
             ],
@@ -350,31 +350,31 @@
             "mtu": "1500",
             "tagged_vlans": [
                 {
-                    "id": 64,
+                    "id": "64",
                     "name": "vlan64"
                 },
                 {
-                    "id": 110,
+                    "id": "110",
                     "name": "vid110"
                 },
                 {
-                    "id": 115,
+                    "id": "115",
                     "name": "v115"
                 },
                 {
-                    "id": 128,
+                    "id": "128",
                     "name": "vlan128"
                 },
                 {
-                    "id": 160,
+                    "id": "160",
                     "name": "id160"
                 },
                 {
-                    "id": 176,
+                    "id": "176",
                     "name": "vlan176"
                 },
                 {
-                    "id": 192,
+                    "id": "192",
                     "name": "vlan192"
                 }
             ],
@@ -488,27 +488,27 @@
             "mtu": "9216",
             "tagged_vlans": [
                 {
-                    "id": 851,
+                    "id": "851",
                     "name": "VLAN0851"
                 },
                 {
-                    "id": 852,
+                    "id": "852",
                     "name": "VLAN0852"
                 },
                 {
-                    "id": 853,
+                    "id": "853",
                     "name": "VLAN0853"
                 },
                 {
-                    "id": 854,
+                    "id": "854",
                     "name": "VLAN0854"
                 },
                 {
-                    "id": 855,
+                    "id": "855",
                     "name": "VLAN0855"
                 },
                 {
-                    "id": 856,
+                    "id": "856",
                     "name": "VLAN0856"
                 }
             ],
@@ -528,43 +528,43 @@
             "mtu": "1500",
             "tagged_vlans": [
                 {
-                    "id": 65,
+                    "id": "65",
                     "name": "vlan65"
                 },
                 {
-                    "id": 66,
+                    "id": "66",
                     "name": "vlan66"
                 },
                 {
-                    "id": 67,
+                    "id": "67",
                     "name": "vlan67"
                 },
                 {
-                    "id": 68,
+                    "id": "68",
                     "name": "vlan68"
                 },
                 {
-                    "id": 70,
+                    "id": "70",
                     "name": "vlan70"
                 },
                 {
-                    "id": 71,
+                    "id": "71",
                     "name": "vlan71"
                 },
                 {
-                    "id": 72,
+                    "id": "72",
                     "name": "vlan72"
                 },
                 {
-                    "id": 135,
+                    "id": "135",
                     "name": "VLAN135"
                 },
                 {
-                    "id": 218,
+                    "id": "218",
                     "name": "dns"
                 },
                 {
-                    "id": 219,
+                    "id": "219",
                     "name": "v219"
                 }
             ],
@@ -584,27 +584,27 @@
             "mtu": "9216",
             "tagged_vlans": [
                 {
-                    "id": 851,
+                    "id": "851",
                     "name": "VLAN0851"
                 },
                 {
-                    "id": 852,
+                    "id": "852",
                     "name": "VLAN0852"
                 },
                 {
-                    "id": 853,
+                    "id": "853",
                     "name": "VLAN0853"
                 },
                 {
-                    "id": 854,
+                    "id": "854",
                     "name": "VLAN0854"
                 },
                 {
-                    "id": 855,
+                    "id": "855",
                     "name": "VLAN0855"
                 },
                 {
-                    "id": 856,
+                    "id": "856",
                     "name": "VLAN0856"
                 }
             ],
@@ -624,27 +624,27 @@
             "mtu": "9216",
             "tagged_vlans": [
                 {
-                    "id": 851,
+                    "id": "851",
                     "name": "VLAN0851"
                 },
                 {
-                    "id": 852,
+                    "id": "852",
                     "name": "VLAN0852"
                 },
                 {
-                    "id": 853,
+                    "id": "853",
                     "name": "VLAN0853"
                 },
                 {
-                    "id": 854,
+                    "id": "854",
                     "name": "VLAN0854"
                 },
                 {
-                    "id": 855,
+                    "id": "855",
                     "name": "VLAN0855"
                 },
                 {
-                    "id": 856,
+                    "id": "856",
                     "name": "VLAN0856"
                 }
             ],
@@ -664,27 +664,27 @@
             "mtu": "9216",
             "tagged_vlans": [
                 {
-                    "id": 851,
+                    "id": "851",
                     "name": "VLAN0851"
                 },
                 {
-                    "id": 852,
+                    "id": "852",
                     "name": "VLAN0852"
                 },
                 {
-                    "id": 853,
+                    "id": "853",
                     "name": "VLAN0853"
                 },
                 {
-                    "id": 854,
+                    "id": "854",
                     "name": "VLAN0854"
                 },
                 {
-                    "id": 855,
+                    "id": "855",
                     "name": "VLAN0855"
                 },
                 {
-                    "id": 856,
+                    "id": "856",
                     "name": "VLAN0856"
                 }
             ],
@@ -704,19 +704,19 @@
             "mtu": "1500",
             "tagged_vlans": [
                 {
-                    "id": 3085,
+                    "id": "3085",
                     "name": "Servers"
                 },
                 {
-                    "id": 3210,
+                    "id": "3210",
                     "name": "svc"
                 },
                 {
-                    "id": 3214,
+                    "id": "3214",
                     "name": "mgm"
                 },
                 {
-                    "id": 3215,
+                    "id": "3215",
                     "name": "mgmt"
                 }
             ],
@@ -736,19 +736,19 @@
             "mtu": "1500",
             "tagged_vlans": [
                 {
-                    "id": 3085,
+                    "id": "3085",
                     "name": "Servers"
                 },
                 {
-                    "id": 3210,
+                    "id": "3210",
                     "name": "svc"
                 },
                 {
-                    "id": 3214,
+                    "id": "3214",
                     "name": "mgm"
                 },
                 {
-                    "id": 3215,
+                    "id": "3215",
                     "name": "mgmt"
                 }
             ],
@@ -768,15 +768,15 @@
             "mtu": "1500",
             "tagged_vlans": [
                 {
-                    "id": 202,
+                    "id": "202",
                     "name": "VLAN0202"
                 },
                 {
-                    "id": 210,
+                    "id": "210",
                     "name": "Mgmt.FW"
                 },
                 {
-                    "id": 214,
+                    "id": "214",
                     "name": "inter"
                 }
             ],
@@ -796,15 +796,15 @@
             "mtu": "1500",
             "tagged_vlans": [
                 {
-                    "id": 202,
+                    "id": "202",
                     "name": "VLAN0202"
                 },
                 {
-                    "id": 210,
+                    "id": "210",
                     "name": "Mgmt.FW"
                 },
                 {
-                    "id": 214,
+                    "id": "214",
                     "name": "inter"
                 }
             ],
@@ -824,51 +824,51 @@
             "mtu": "9216",
             "tagged_vlans": [
                 {
-                    "id": 1,
+                    "id": "1",
                     "name": "default"
                 },
                 {
-                    "id": 2,
+                    "id": "2",
                     "name": "VLAN0002"
                 },
                 {
-                    "id": 3,
+                    "id": "3",
                     "name": "VLAN0003"
                 },
                 {
-                    "id": 4,
+                    "id": "4",
                     "name": "VLAN0004"
                 },
                 {
-                    "id": 5,
+                    "id": "5",
                     "name": "VLAN0005"
                 },
                 {
-                    "id": 6,
+                    "id": "6",
                     "name": "VLAN0006"
                 },
                 {
-                    "id": 7,
+                    "id": "7",
                     "name": "VLAN0007"
                 },
                 {
-                    "id": 8,
+                    "id": "8",
                     "name": "VLAN0008"
                 },
                 {
-                    "id": 9,
+                    "id": "9",
                     "name": "VLAN0009"
                 },
                 {
-                    "id": 211,
+                    "id": "211",
                     "name": "VLAN0211"
                 },
                 {
-                    "id": 212,
+                    "id": "212",
                     "name": "VLAN0212"
                 },
                 {
-                    "id": 213,
+                    "id": "213",
                     "name": "VLAN0213"
                 }
             ],
@@ -888,51 +888,51 @@
             "mtu": "9216",
             "tagged_vlans": [
                 {
-                    "id": 1,
+                    "id": "1",
                     "name": "default"
                 },
                 {
-                    "id": 2,
+                    "id": "2",
                     "name": "VLAN0002"
                 },
                 {
-                    "id": 3,
+                    "id": "3",
                     "name": "VLAN0003"
                 },
                 {
-                    "id": 4,
+                    "id": "4",
                     "name": "VLAN0004"
                 },
                 {
-                    "id": 5,
+                    "id": "5",
                     "name": "VLAN0005"
                 },
                 {
-                    "id": 6,
+                    "id": "6",
                     "name": "VLAN0006"
                 },
                 {
-                    "id": 7,
+                    "id": "7",
                     "name": "VLAN0007"
                 },
                 {
-                    "id": 8,
+                    "id": "8",
                     "name": "VLAN0008"
                 },
                 {
-                    "id": 9,
+                    "id": "9",
                     "name": "VLAN0009"
                 },
                 {
-                    "id": 211,
+                    "id": "211",
                     "name": "VLAN0211"
                 },
                 {
-                    "id": 212,
+                    "id": "212",
                     "name": "VLAN0212"
                 },
                 {
-                    "id": 213,
+                    "id": "213",
                     "name": "VLAN0213"
                 }
             ],
@@ -952,51 +952,51 @@
             "mtu": "9216",
             "tagged_vlans": [
                 {
-                    "id": 1,
+                    "id": "1",
                     "name": "default"
                 },
                 {
-                    "id": 2,
+                    "id": "2",
                     "name": "VLAN0002"
                 },
                 {
-                    "id": 3,
+                    "id": "3",
                     "name": "VLAN0003"
                 },
                 {
-                    "id": 4,
+                    "id": "4",
                     "name": "VLAN0004"
                 },
                 {
-                    "id": 5,
+                    "id": "5",
                     "name": "VLAN0005"
                 },
                 {
-                    "id": 6,
+                    "id": "6",
                     "name": "VLAN0006"
                 },
                 {
-                    "id": 7,
+                    "id": "7",
                     "name": "VLAN0007"
                 },
                 {
-                    "id": 8,
+                    "id": "8",
                     "name": "VLAN0008"
                 },
                 {
-                    "id": 9,
+                    "id": "9",
                     "name": "VLAN0009"
                 },
                 {
-                    "id": 211,
+                    "id": "211",
                     "name": "VLAN0211"
                 },
                 {
-                    "id": 212,
+                    "id": "212",
                     "name": "VLAN0212"
                 },
                 {
-                    "id": 213,
+                    "id": "213",
                     "name": "VLAN0213"
                 }
             ],
@@ -1036,51 +1036,51 @@
             "mtu": "9216",
             "tagged_vlans": [
                 {
-                    "id": 1,
+                    "id": "1",
                     "name": "default"
                 },
                 {
-                    "id": 2,
+                    "id": "2",
                     "name": "VLAN0002"
                 },
                 {
-                    "id": 3,
+                    "id": "3",
                     "name": "VLAN0003"
                 },
                 {
-                    "id": 4,
+                    "id": "4",
                     "name": "VLAN0004"
                 },
                 {
-                    "id": 5,
+                    "id": "5",
                     "name": "VLAN0005"
                 },
                 {
-                    "id": 6,
+                    "id": "6",
                     "name": "VLAN0006"
                 },
                 {
-                    "id": 7,
+                    "id": "7",
                     "name": "VLAN0007"
                 },
                 {
-                    "id": 8,
+                    "id": "8",
                     "name": "VLAN0008"
                 },
                 {
-                    "id": 9,
+                    "id": "9",
                     "name": "VLAN0009"
                 },
                 {
-                    "id": 211,
+                    "id": "211",
                     "name": "VLAN0211"
                 },
                 {
-                    "id": 212,
+                    "id": "212",
                     "name": "VLAN0212"
                 },
                 {
-                    "id": 213,
+                    "id": "213",
                     "name": "VLAN0213"
                 }
             ],
@@ -1124,23 +1124,23 @@
             "mtu": "1500",
             "tagged_vlans": [
                 {
-                    "id": 10,
+                    "id": "10",
                     "name": "vlan10"
                 },
                 {
-                    "id": 136,
+                    "id": "136",
                     "name": "vlan136"
                 },
                 {
-                    "id": 202,
+                    "id": "202",
                     "name": "VLAN0202"
                 },
                 {
-                    "id": 210,
+                    "id": "210",
                     "name": "Mgmt.FW"
                 },
                 {
-                    "id": 214,
+                    "id": "214",
                     "name": "inter"
                 }
             ],
@@ -1160,23 +1160,23 @@
             "mtu": "1500",
             "tagged_vlans": [
                 {
-                    "id": 10,
+                    "id": "10",
                     "name": "vlan10"
                 },
                 {
-                    "id": 136,
+                    "id": "136",
                     "name": "vlan136"
                 },
                 {
-                    "id": 202,
+                    "id": "202",
                     "name": "VLAN0202"
                 },
                 {
-                    "id": 210,
+                    "id": "210",
                     "name": "Mgmt.FW"
                 },
                 {
-                    "id": 214,
+                    "id": "214",
                     "name": "inter"
                 }
             ],
@@ -1196,19 +1196,19 @@
             "mtu": "9216",
             "tagged_vlans": [
                 {
-                    "id": 1,
+                    "id": "1",
                     "name": "default"
                 },
                 {
-                    "id": 209,
+                    "id": "209",
                     "name": "abc"
                 },
                 {
-                    "id": 210,
+                    "id": "210",
                     "name": "Mgmt.FW"
                 },
                 {
-                    "id": 211,
+                    "id": "211",
                     "name": "VLAN0211"
                 }
             ],
@@ -1228,19 +1228,19 @@
             "mtu": "9216",
             "tagged_vlans": [
                 {
-                    "id": 1,
+                    "id": "1",
                     "name": "default"
                 },
                 {
-                    "id": 209,
+                    "id": "209",
                     "name": "abc"
                 },
                 {
-                    "id": 210,
+                    "id": "210",
                     "name": "Mgmt.FW"
                 },
                 {
-                    "id": 211,
+                    "id": "211",
                     "name": "VLAN0211"
                 }
             ],
@@ -1260,19 +1260,19 @@
             "mtu": "9216",
             "tagged_vlans": [
                 {
-                    "id": 1,
+                    "id": "1",
                     "name": "default"
                 },
                 {
-                    "id": 209,
+                    "id": "209",
                     "name": "abc"
                 },
                 {
-                    "id": 210,
+                    "id": "210",
                     "name": "Mgmt.FW"
                 },
                 {
-                    "id": 211,
+                    "id": "211",
                     "name": "VLAN0211"
                 }
             ],
@@ -1292,19 +1292,19 @@
             "mtu": "9216",
             "tagged_vlans": [
                 {
-                    "id": 1,
+                    "id": "1",
                     "name": "default"
                 },
                 {
-                    "id": 209,
+                    "id": "209",
                     "name": "abc"
                 },
                 {
-                    "id": 210,
+                    "id": "210",
                     "name": "Mgmt.FW"
                 },
                 {
-                    "id": 211,
+                    "id": "211",
                     "name": "VLAN0211"
                 }
             ],
@@ -1424,7 +1424,7 @@
             "mtu": "9216",
             "tagged_vlans": [
                 {
-                    "id": 68,
+                    "id": "68",
                     "name": "vlan68"
                 }
             ],
@@ -1484,23 +1484,23 @@
             "mtu": "9216",
             "tagged_vlans": [
                 {
-                    "id": 68,
+                    "id": "68",
                     "name": "vlan68"
                 },
                 {
-                    "id": 215,
+                    "id": "215",
                     "name": "vmware"
                 },
                 {
-                    "id": 216,
+                    "id": "216",
                     "name": "VLAN0216"
                 },
                 {
-                    "id": 219,
+                    "id": "219",
                     "name": "v219"
                 },
                 {
-                    "id": 3030,
+                    "id": "3030",
                     "name": "storage"
                 }
             ],
@@ -1520,23 +1520,23 @@
             "mtu": "9216",
             "tagged_vlans": [
                 {
-                    "id": 68,
+                    "id": "68",
                     "name": "vlan68"
                 },
                 {
-                    "id": 215,
+                    "id": "215",
                     "name": "vmware"
                 },
                 {
-                    "id": 216,
+                    "id": "216",
                     "name": "VLAN0216"
                 },
                 {
-                    "id": 219,
+                    "id": "219",
                     "name": "v219"
                 },
                 {
-                    "id": 3030,
+                    "id": "3030",
                     "name": "storage"
                 }
             ],
@@ -1556,23 +1556,23 @@
             "mtu": "9216",
             "tagged_vlans": [
                 {
-                    "id": 68,
+                    "id": "68",
                     "name": "vlan68"
                 },
                 {
-                    "id": 215,
+                    "id": "215",
                     "name": "vmware"
                 },
                 {
-                    "id": 216,
+                    "id": "216",
                     "name": "VLAN0216"
                 },
                 {
-                    "id": 219,
+                    "id": "219",
                     "name": "v219"
                 },
                 {
-                    "id": 3030,
+                    "id": "3030",
                     "name": "storage"
                 }
             ],
@@ -2165,27 +2165,27 @@
             "mtu": "9216",
             "tagged_vlans": [
                 {
-                    "id": 851,
+                    "id": "851",
                     "name": "VLAN0851"
                 },
                 {
-                    "id": 852,
+                    "id": "852",
                     "name": "VLAN0852"
                 },
                 {
-                    "id": 853,
+                    "id": "853",
                     "name": "VLAN0853"
                 },
                 {
-                    "id": 854,
+                    "id": "854",
                     "name": "VLAN0854"
                 },
                 {
-                    "id": 855,
+                    "id": "855",
                     "name": "VLAN0855"
                 },
                 {
-                    "id": 856,
+                    "id": "856",
                     "name": "VLAN0856"
                 }
             ],
@@ -2205,31 +2205,31 @@
             "mtu": "1500",
             "tagged_vlans": [
                 {
-                    "id": 65,
+                    "id": "65",
                     "name": "vlan65"
                 },
                 {
-                    "id": 66,
+                    "id": "66",
                     "name": "vlan66"
                 },
                 {
-                    "id": 67,
+                    "id": "67",
                     "name": "vlan67"
                 },
                 {
-                    "id": 68,
+                    "id": "68",
                     "name": "vlan68"
                 },
                 {
-                    "id": 70,
+                    "id": "70",
                     "name": "vlan70"
                 },
                 {
-                    "id": 71,
+                    "id": "71",
                     "name": "vlan71"
                 },
                 {
-                    "id": 72,
+                    "id": "72",
                     "name": "vlan72"
                 }
             ],
@@ -2249,19 +2249,19 @@
             "mtu": "1500",
             "tagged_vlans": [
                 {
-                    "id": 3085,
+                    "id": "3085",
                     "name": "Servers"
                 },
                 {
-                    "id": 3210,
+                    "id": "3210",
                     "name": "svc"
                 },
                 {
-                    "id": 3214,
+                    "id": "3214",
                     "name": "mgm"
                 },
                 {
-                    "id": 3215,
+                    "id": "3215",
                     "name": "mgmt"
                 }
             ],
@@ -2281,15 +2281,15 @@
             "mtu": "1500",
             "tagged_vlans": [
                 {
-                    "id": 202,
+                    "id": "202",
                     "name": "VLAN0202"
                 },
                 {
-                    "id": 210,
+                    "id": "210",
                     "name": "Mgmt.FW"
                 },
                 {
-                    "id": 214,
+                    "id": "214",
                     "name": "inter"
                 }
             ],
@@ -2309,7 +2309,7 @@
             "mtu": "1500",
             "tagged_vlans": [
                 {
-                    "id": 210,
+                    "id": "210",
                     "name": "Mgmt.FW"
                 }
             ],
@@ -2329,51 +2329,51 @@
             "mtu": "9216",
             "tagged_vlans": [
                 {
-                    "id": 1,
+                    "id": "1",
                     "name": "default"
                 },
                 {
-                    "id": 2,
+                    "id": "2",
                     "name": "VLAN0002"
                 },
                 {
-                    "id": 3,
+                    "id": "3",
                     "name": "VLAN0003"
                 },
                 {
-                    "id": 4,
+                    "id": "4",
                     "name": "VLAN0004"
                 },
                 {
-                    "id": 5,
+                    "id": "5",
                     "name": "VLAN0005"
                 },
                 {
-                    "id": 6,
+                    "id": "6",
                     "name": "VLAN0006"
                 },
                 {
-                    "id": 7,
+                    "id": "7",
                     "name": "VLAN0007"
                 },
                 {
-                    "id": 8,
+                    "id": "8",
                     "name": "VLAN0008"
                 },
                 {
-                    "id": 9,
+                    "id": "9",
                     "name": "VLAN0009"
                 },
                 {
-                    "id": 211,
+                    "id": "211",
                     "name": "VLAN0211"
                 },
                 {
-                    "id": 212,
+                    "id": "212",
                     "name": "VLAN0212"
                 },
                 {
-                    "id": 213,
+                    "id": "213",
                     "name": "VLAN0213"
                 }
             ],
@@ -2410,23 +2410,23 @@
             "mtu": "1500",
             "tagged_vlans": [
                 {
-                    "id": 10,
+                    "id": "10",
                     "name": "vlan10"
                 },
                 {
-                    "id": 136,
+                    "id": "136",
                     "name": "vlan136"
                 },
                 {
-                    "id": 202,
+                    "id": "202",
                     "name": "VLAN0202"
                 },
                 {
-                    "id": 210,
+                    "id": "210",
                     "name": "Mgmt.FW"
                 },
                 {
-                    "id": 214,
+                    "id": "214",
                     "name": "inter"
                 }
             ],
@@ -2446,19 +2446,19 @@
             "mtu": "9216",
             "tagged_vlans": [
                 {
-                    "id": 1,
+                    "id": "1",
                     "name": "default"
                 },
                 {
-                    "id": 209,
+                    "id": "209",
                     "name": "abc"
                 },
                 {
-                    "id": 210,
+                    "id": "210",
                     "name": "Mgmt.FW"
                 },
                 {
-                    "id": 211,
+                    "id": "211",
                     "name": "VLAN0211"
                 }
             ],
@@ -2478,7 +2478,7 @@
             "mtu": "9216",
             "tagged_vlans": [
                 {
-                    "id": 68,
+                    "id": "68",
                     "name": "vlan68"
                 }
             ],
@@ -2518,23 +2518,23 @@
             "mtu": "9216",
             "tagged_vlans": [
                 {
-                    "id": 68,
+                    "id": "68",
                     "name": "vlan68"
                 },
                 {
-                    "id": 215,
+                    "id": "215",
                     "name": "vmware"
                 },
                 {
-                    "id": 216,
+                    "id": "216",
                     "name": "VLAN0216"
                 },
                 {
-                    "id": 219,
+                    "id": "219",
                     "name": "v219"
                 },
                 {
-                    "id": 3030,
+                    "id": "3030",
                     "name": "storage"
                 }
             ],

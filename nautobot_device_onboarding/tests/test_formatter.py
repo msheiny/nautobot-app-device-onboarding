@@ -300,7 +300,7 @@ class TestFormatterExtractAndProcess(unittest.TestCase):
                     "trunking_vlans": ["10"],
                 }
             ],
-            [{"id": 10, "name": "10.39.110.0/25.LAN"}],
+            [{"id": "10", "name": "10.39.110.0/25.LAN"}],
         )
         self.assertEqual(expected_parsed_result, actual_result)
 

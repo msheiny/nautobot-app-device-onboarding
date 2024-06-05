@@ -72,7 +72,7 @@
             "mtu": 1500,
             "tagged_vlans": [
                 {
-                    "id": 2,
+                    "id": "2",
                     "name": "VLAN2"
                 }
             ],
