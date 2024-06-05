@@ -5,7 +5,142 @@
             "hostname": "veos-0"
         }
     ],
-    "show ip interface | json": {},
+    "show ip interface | json": {
+        "interfaces": {
+            "Ethernet1": {
+                "name": "Ethernet1",
+                "lineProtocolStatus": "down",
+                "interfaceStatus": "disabled",
+                "mtu": 1500,
+                "interfaceAddressBrief": {
+                    "ipAddr": {
+                        "address": "1.1.1.1",
+                        "maskLen": 24
+                    }
+                },
+                "ipv4Routable240": false,
+                "ipv4Routable0": false,
+                "enabled": false,
+                "description": "",
+                "interfaceAddress": {
+                    "primaryIp": {
+                        "address": "1.1.1.1",
+                        "maskLen": 24
+                    },
+                    "secondaryIps": {},
+                    "secondaryIpsOrderedList": [],
+                    "virtualIp": {
+                        "address": "0.0.0.0",
+                        "maskLen": 0
+                    },
+                    "virtualSecondaryIps": {},
+                    "virtualSecondaryIpsOrderedList": [],
+                    "broadcastAddress": "255.255.255.255",
+                    "dhcp": false
+                },
+                "proxyArp": false,
+                "proxyArpAllowDefault": false,
+                "localProxyArp": false,
+                "gratuitousArp": false,
+                "routedAddr": "52:54:00:91:1e:bf",
+                "isVrrpBackup": false,
+                "vrf": "default",
+                "urpf": "disable",
+                "addresslessForwarding": "isInvalid",
+                "directedBroadcastEnabled": false,
+                "maxMssIngress": 0,
+                "maxMssEgress": 0
+            },
+            "Ethernet4": {
+                "name": "Ethernet4",
+                "lineProtocolStatus": "up",
+                "interfaceStatus": "connected",
+                "mtu": 1500,
+                "interfaceAddressBrief": {
+                    "ipAddr": {
+                        "address": "0.0.0.0",
+                        "maskLen": 0
+                    }
+                },
+                "ipv4Routable240": false,
+                "ipv4Routable0": false,
+                "enabled": true,
+                "description": "",
+                "interfaceAddress": {
+                    "primaryIp": {
+                        "address": "0.0.0.0",
+                        "maskLen": 0
+                    },
+                    "secondaryIps": {},
+                    "secondaryIpsOrderedList": [],
+                    "virtualIp": {
+                        "address": "0.0.0.0",
+                        "maskLen": 0
+                    },
+                    "virtualSecondaryIps": {},
+                    "virtualSecondaryIpsOrderedList": [],
+                    "broadcastAddress": "255.255.255.255",
+                    "dhcp": false
+                },
+                "proxyArp": false,
+                "proxyArpAllowDefault": false,
+                "localProxyArp": false,
+                "gratuitousArp": false,
+                "routedAddr": "52:54:00:91:1e:bf",
+                "isVrrpBackup": false,
+                "vrf": "jeff",
+                "urpf": "disable",
+                "addresslessForwarding": "isInvalid",
+                "directedBroadcastEnabled": false,
+                "maxMssIngress": 0,
+                "maxMssEgress": 0
+            },
+            "Management1": {
+                "name": "Management1",
+                "lineProtocolStatus": "up",
+                "interfaceStatus": "connected",
+                "mtu": 1500,
+                "interfaceAddressBrief": {
+                    "ipAddr": {
+                        "address": "10.1.1.219",
+                        "maskLen": 24
+                    }
+                },
+                "ipv4Routable240": false,
+                "ipv4Routable0": false,
+                "enabled": true,
+                "description": "",
+                "interfaceAddress": {
+                    "primaryIp": {
+                        "address": "10.1.1.219",
+                        "maskLen": 24
+                    },
+                    "secondaryIps": {},
+                    "secondaryIpsOrderedList": [],
+                    "virtualIp": {
+                        "address": "0.0.0.0",
+                        "maskLen": 0
+                    },
+                    "virtualSecondaryIps": {},
+                    "virtualSecondaryIpsOrderedList": [],
+                    "broadcastAddress": "255.255.255.255",
+                    "dhcp": true
+                },
+                "proxyArp": false,
+                "proxyArpAllowDefault": false,
+                "localProxyArp": false,
+                "gratuitousArp": false,
+                "routedAddr": "52:54:00:0d:29:5c",
+                "isVrrpBackup": false,
+                "vrf": "default",
+                "urpf": "disable",
+                "addresslessForwarding": "isInvalid",
+                "directedBroadcastEnabled": false,
+                "maxMssIngress": 0,
+                "maxMssEgress": 0
+            }
+        }
+    },
     "show interfaces | json": {
         "interfaces": {
             "Ethernet1": {
@@ -413,5 +548,122 @@
             "sys_mac": "5254.0091.1ebf",
             "total_memory": "1979668"
         }
-    ]
+    ],
+    "show interfaces switchport | json": {
+        "switchports": {
+            "Ethernet2": {
+                "enabled": true,
+                "switchportInfo": {
+                    "mode": "access",
+                    "phoneTrunk": false,
+                    "macLearning": true,
+                    "tpid": "0x8100",
+                    "tpidStatus": true,
+                    "dot1qVlanTagRequired": false,
+                    "dot1qVlanTagRequiredStatus": false,
+                    "dot1qVlanTagDisallowed": false,
+                    "accessVlanId": 1,
+                    "accessVlanName": "default",
+                    "trunkingNativeVlanId": 1,
+                    "trunkingNativeVlanName": "default",
+                    "trunkAllowedVlans": "ALL",
+                    "dynamicAllowedVlans": {},
+                    "dynamicBlockedVlans": {},
+                    "staticTrunkGroups": [],
+                    "dynamicTrunkGroups": [],
+                    "sourceportFilterMode": "enabled",
+                    "vlanForwardingMode": "allowedVlansOnly",
+                    "phoneVlan": 0,
+                    "phoneTrunkUntagged": false,
+                    "mbvaEnabled": false
+                }
+            },
+            "Ethernet3": {
+                "enabled": true,
+                "switchportInfo": {
+                    "mode": "access",
+                    "phoneTrunk": false,
+                    "macLearning": true,
+                    "tpid": "0x8100",
+                    "tpidStatus": true,
+                    "dot1qVlanTagRequired": false,
+                    "dot1qVlanTagRequiredStatus": false,
+                    "dot1qVlanTagDisallowed": false,
+                    "accessVlanId": 1,
+                    "accessVlanName": "default",
+                    "trunkingNativeVlanId": 1,
+                    "trunkingNativeVlanName": "default",
+                    "trunkAllowedVlans": "ALL",
+                    "dynamicAllowedVlans": {},
+                    "dynamicBlockedVlans": {},
+                    "staticTrunkGroups": [],
+                    "dynamicTrunkGroups": [],
+                    "sourceportFilterMode": "enabled",
+                    "vlanForwardingMode": "allowedVlansOnly",
+                    "phoneVlan": 0,
+                    "phoneTrunkUntagged": false,
+                    "mbvaEnabled": false
+                }
+            },
+            "Ethernet4": {
+                "enabled": true,
+                "switchportInfo": {
+                    "mode": "trunk",
+                    "phoneTrunk": false,
+                    "macLearning": true,
+                    "tpid": "0x8100",
+                    "tpidStatus": true,
+                    "dot1qVlanTagRequired": false,
+                    "dot1qVlanTagRequiredStatus": false,
+                    "dot1qVlanTagDisallowed": false,
+                    "accessVlanId": 1,
+                    "accessVlanName": "default",
+                    "trunkingNativeVlanId": 1,
+                    "trunkingNativeVlanName": "default",
+                    "trunkAllowedVlans": "2",
+                    "dynamicAllowedVlans": {},
+                    "dynamicBlockedVlans": {},
+                    "staticTrunkGroups": [],
+                    "dynamicTrunkGroups": [],
+                    "sourceportFilterMode": "enabled",
+                    "vlanForwardingMode": "allowedVlansOnly",
+                    "phoneVlan": 0,
+                    "phoneTrunkUntagged": false,
+                    "mbvaEnabled": false
+                }
+            }
+        }
+    },
+    "show vlan configured-ports | json": {
+        "vlans": {
+            "1": {
+                "name": "default",
+                "dynamic": false,
+                "status": "active",
+                "interfaces": {
+                    "Ethernet2": {
+                        "privatePromoted": false,
+                        "blocked": null
+                    },
+                    "Ethernet3": {
+                        "privatePromoted": false,
+                        "blocked": null
+                    }
+                }
+            },
+            "2": {
+                "name": "VLAN2",
+                "dynamic": false,
+                "status": "active",
+                "interfaces": {}
+            },
+            "10": {
+                "name": "vid10",
+                "dynamic": false,
+                "status": "active",
+                "interfaces": {}
+            }
+        },
+        "sourceDetail": ""
+    }
 }

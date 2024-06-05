@@ -29,6 +29,14 @@ sync_devices:
         post_processor: "{% if '/' in obj[0] %}{{ obj[0].split('/')[1] }}{% else %}31{% endif %}"
         # post_processor: "{{ obj[0] | string }}"
 sync_network_data:
+  pre_processor:
+    vlan_map:
+      commands:
+        - command: "show vlan"
+          parser: "textfsm"
+          # Since we use the jdiff custom jmespath we have access to save keys with $ syntax.
+          jpath: "[*].[$vlan_id$,vlan_name]"
+          post_processor: "{{ obj | flatten_list_of_dict_from_value('vlan_name') | tojson }}"
   serial:
     commands:
       - command: "show inventory"
@@ -98,14 +106,14 @@ sync_network_data:
         iterable_type: "dict"
   interfaces__tagged_vlans:
     commands:
-      - command: "show vlan"
+      - command: "show interface switchport"
         parser: "textfsm"
-        jpath: "[*].{id: vlan_id, name: vlan_name, interfaces: interfaces}"
-        post_processor: "{% set tagged_vlans = [] %}{% for v in obj %}{% if current_key in v['interfaces'] | canonical_interface_name_list %}{% set _=tagged_vlans.append({'id': v['id'], 'name': v['name']}) %}{% endif %}{% endfor %}{{ tagged_vlans | tojson }}"
+        jpath: "[?INTERFACE=='{{ current_key }}'].{admin_mode: MODE, mode: MODE, access_vlan: ACCESS_VLAN, trunking_vlans: TRUNKING_VLANS}"
+        post_processor: "{{ obj | get_vlan_data(vlan_map) | tojson }}"
   interfaces__untagged_vlan:
     commands:
-      - command: "show vlan"
+      - command: "show interface switchport"
         parser: "textfsm"
-        jpath: "[*].{id: vlan_id, name: vlan_name, interfaces: interfaces}"
+        jpath: "[?contains(INTERFACE, '{{ current_key }}')].NATIVE_VLAN"
+        post_processor: "{% if obj | length > 0 %}{{ {'id': obj[0], 'name': vlan_map[obj[0]]} | tojson }}{% else %}{{ obj }}{% endif %}"
         iterable_type: "dict"
-        post_processor: "{% set untagged_vlan = [] %}{% for v in obj %}{% if current_key in v['interfaces'] | canonical_interface_name_list %}{% set _=untagged_vlan.append({'id': v['id'], 'name': v['name']}) %}{% endif %}{% endfor %}{{ untagged_vlan | tojson }}"

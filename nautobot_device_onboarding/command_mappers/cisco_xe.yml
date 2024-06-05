@@ -37,7 +37,7 @@ sync_network_data:
           parser: "textfsm"
           # Since we use the jdiff custom jmespath we have access to save keys with $ syntax.
           jpath: "[*].[$vlan_id$,vlan_name]"
-          post_processor: "{% set result={} %}{% for entry in obj %}{{ result.update(entry) or '' | tojson }}{% endfor %}{{ result }}"
+          post_processor: "{{ obj | flatten_list_of_dict_from_value('vlan_name') | tojson }}"
   serial:
     commands:
       - command: "show version"
@@ -115,5 +115,5 @@ sync_network_data:
       - command: "show interfaces switchport"
         parser: "textfsm"
         jpath: "[?contains(interface, '{{ current_key | abbreviated_interface_name  }}')].native_vlan"
-        post_processor: "{% if obj | length > 0 %}{{ vlan_map | selectattr('id', 'eq', obj[0]) | list | tojson }}{% else %}{{ obj }}{% endif %}"
+        post_processor: "{% if obj | length > 0 %}{{ {'id': obj[0], 'name': vlan_map[obj[0]]} | tojson }}{% else %}{{ obj }}{% endif %}"
         iterable_type: "dict"

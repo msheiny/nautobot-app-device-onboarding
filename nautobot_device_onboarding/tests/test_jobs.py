@@ -1,7 +1,6 @@
 """Test Jobs."""
 
 from unittest.mock import patch
-from nautobot.extras.models.jobs import JobLogEntry
 
 from nautobot.apps.testing import create_job_result_and_run_job
 from nautobot.core.testing import TransactionTestCase

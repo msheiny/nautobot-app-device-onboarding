@@ -71,6 +71,8 @@ def normalize_processed_data(processed_data, iterable_type):
                         post_processed_data = post_processed_data[0]
             else:
                 post_processed_data = post_processed_data[0]
+    if not post_processed_data and iterable_type in ["str", "dict"]:
+        return process_empty_result(iterable_type)
     return post_processed_data
 
 

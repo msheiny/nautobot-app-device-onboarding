@@ -273,7 +273,7 @@ class TestFormatterExtractAndProcess(unittest.TestCase):
                 "voice_vlan": "none",
             }
         ]
-        vlan_map_post_processed = {"1": {"vlan_name": "default"}, "10": {"vlan_name": "10.39.110.0/25.LAN"}}
+        vlan_map_post_processed = {"1": "default", "10": "10.39.110.0/25.LAN"}
         actual_result = extract_and_post_process(
             parsed_command_output,
             {
@@ -452,7 +452,6 @@ class TestFormatterSyncNetworkDataNoOptions(unittest.TestCase):
                 self.assertFalse(self.host.defaults.data.get("sync_vrfs"))
 
     def test_perform_data_extraction_sync_network_data_no_options(self):
-        self.maxDiff = None
         supported_platforms = list(self.platform_parsing_info.keys())
         supported_platforms.remove("cisco_wlc")
         for platform in supported_platforms:
@@ -518,7 +517,6 @@ class TestFormatterSyncNetworkDataWithVrfs(unittest.TestCase):
                 self.assertTrue(self.host.defaults.data.get("sync_vrfs"))
 
     def test_perform_data_extraction_sync_network_data_with_vrfs(self):
-        self.maxDiff = None
         supported_platforms = list(self.platform_parsing_info.keys())
         supported_platforms.remove("cisco_wlc")
         for platform in supported_platforms:
@@ -548,7 +546,6 @@ class TestFormatterSyncNetworkDataWithVrfs(unittest.TestCase):
                             self.assertEqual(expected_parsed_result, actual_result)
 
 
-@unittest.skip(reason="Todo test sync network data with vrfs off, vlans on.")
 class TestFormatterSyncNetworkDataWithVlans(unittest.TestCase):
     """Tests to ensure formatter is working for sync devices 'ssot job'."""
 
@@ -585,7 +582,6 @@ class TestFormatterSyncNetworkDataWithVlans(unittest.TestCase):
                 self.assertFalse(self.host.defaults.data.get("sync_vrfs"))
 
     def test_perform_data_extraction_sync_network_data_with_vlans(self):
-        self.maxDiff = None
         supported_platforms = list(self.platform_parsing_info.keys())
         supported_platforms.remove("cisco_wlc")
         for platform in supported_platforms:
@@ -652,7 +648,6 @@ class TestFormatterSyncNetworkDataAll(unittest.TestCase):
                 self.assertTrue(self.host.defaults.data.get("sync_vrfs"))
 
     def test_perform_data_extraction_sync_network_data_all(self):
-        self.maxDiff = None
         supported_platforms = list(self.platform_parsing_info.keys())
         supported_platforms.remove("cisco_wlc")
         for platform in supported_platforms:

@@ -34,7 +34,8 @@ def port_mode_to_nautobot(current_mode):
     mode_mapping = {
         "access": "access",
         "trunk": "tagged",
-        # "trunk+x": "tagged-all"
+        "bridged": "tagged",
+        "routed": "",
     }
     return mode_mapping.get(current_mode, "")
 
@@ -48,22 +49,58 @@ def key_exist_or_default(dict_obj, key):
 
 
 @library.filter
+def flatten_list_of_dict_from_value(list_of_dicts, value):
+    """Takes a list of dictionaries with a value and flattens it."""
+    flat_data = {list(item.keys())[0]: item[list(item.keys())[0]][value] for item in list_of_dicts}
+    return flat_data
+
+
+@library.filter
+def flatten_dict_from_value(main_dict, wanted_value):
+    """Takes a dictionary of dictionaries with a value and flattens it."""
+    return {k: v[wanted_value] for k, v in main_dict.items()}
+
+
+@library.filter
+def get_entry_from_dict(dict_obj, key):
+    """Take a dict with a key and return its object."""
+    return dict_obj.get(key, "")
+
+
+@library.filter
 def interface_mode_logic(item):  # pylint: disable=too-many-return-statements
     """Logic to translate network modes to nautobot mode."""
-    if len(item) == 1:
-        if "access" in item[0]["admin_mode"].lower():
-            return "access"
-        if item[0]["admin_mode"] == "trunk" and item[0]["trunking_vlans"] == ["ALL"]:
-            return "tagged-all"
-        if item[0]["admin_mode"] == "trunk":
-            return "tagged"
-        if "dynamic" in item[0]["admin_mode"]:
-            if "access" in item[0]["mode"]:
+    if isinstance(item, dict):
+        if item.get("admin_mode"):
+            if "access" in item["admin_mode"].lower():
                 return "access"
-            if item[0]["mode"] == "trunk" and item[0]["trunking_vlans"] == ["ALL"]:
+            if item["admin_mode"] == "trunk" and item["trunking_vlans"] in ["ALL", "1-4094"]:
                 return "tagged-all"
-            if item[0]["mode"] == "trunk":
+            if item["admin_mode"] == "trunk":
                 return "tagged"
+            if "dynamic" in item["admin_mode"]:
+                if "access" in item["mode"]:
+                    return "access"
+                if item["mode"] == "trunk" and item["trunking_vlans"] in ["ALL", "1-4094"]:
+                    return "tagged-all"
+                if item["mode"] == "trunk":
+                    return "tagged"
+    else:
+        if len(item) == 1:
+            if item[0].get("admin_mode"):
+                if "access" in item[0]["admin_mode"].lower():
+                    return "access"
+                if item[0]["admin_mode"] == "trunk" and item[0]["trunking_vlans"] in ["ALL", "1-4094"]:
+                    return "tagged-all"
+                if item[0]["admin_mode"] == "trunk":
+                    return "tagged"
+                if "dynamic" in item[0]["admin_mode"]:
+                    if "access" in item[0]["mode"]:
+                        return "access"
+                    if item[0]["mode"] == "trunk" and item[0]["trunking_vlans"] in ["ALL", "1-4094"]:
+                        return "tagged-all"
+                    if item[0]["mode"] == "trunk":
+                        return "tagged"
     return ""
 
 
@@ -71,17 +108,29 @@ def interface_mode_logic(item):  # pylint: disable=too-many-return-statements
 def get_vlan_data(item, vlan_mapping):
     """Get vlan information from an item."""
     int_mode = interface_mode_logic(item)
+    current_item = item
+    if isinstance(item, list) and len(item) == 1:
+        current_item = item[0]
     if int_mode:
-        if int_mode == "access":
-            # {id: vlan_id, name: vlan_name}
-            return [{"id": item[0]["access_vlan"], "name": vlan_mapping[item[0]["access_vlan"]]["vlan_name"]}]
         if int_mode == "tagged-all":
             return []
+        if int_mode == "access":
+            if current_item.get("access_vlan"):
+                return [
+                    {
+                        "id": current_item["access_vlan"],
+                        "name": vlan_mapping.get(
+                            str(current_item["access_vlan"]), f"VLAN{str(current_item['access_vlan']).zfill(4)}"
+                        ),
+                    }
+                ]
+        if not isinstance(current_item["trunking_vlans"], list):
+            trunk_vlans = [current_item["trunking_vlans"]]
+        else:
+            trunk_vlans = current_item["trunking_vlans"]
         return [
-            {"id": vid, "name": vlan_mapping[item[0]["access_vlan"]]["vlan_name"]}
-            for vid in list(
-                chain.from_iterable([vlanconfig_to_list(vlan_stanza) for vlan_stanza in item[0]["trunking_vlans"]])
-            )
+            {"id": vid, "name": vlan_mapping.get(str(vid), f"VLAN{str(vid).zfill(4)}")}
+            for vid in list(chain.from_iterable([vlanconfig_to_list(vlan_stanza) for vlan_stanza in trunk_vlans]))
         ]
     return []
 
