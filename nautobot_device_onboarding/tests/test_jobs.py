@@ -52,18 +52,18 @@ class SSOTSyncDevicesTestCase(TransactionTestCase):
 
         self.assertEqual(job_result.status, JobResultStatusChoices.STATUS_SUCCESS)
         self.assertEqual(2, Device.objects.all().count())
-        for returned_device_ip, device_data in device_data.return_value.items():
-            device = Device.objects.get(serial=device_data["serial"])
-            self.assertEqual(device.name, device_data["hostname"])
-            self.assertEqual(device.serial, device_data["serial"])
-            self.assertEqual(device.device_type.model, device_data["device_type"])
-            self.assertEqual(device.device_type.manufacturer.name, device_data["manufacturer"])
-            self.assertEqual(device.platform.name, device_data["platform"])
-            self.assertEqual(device.platform.network_driver, device_data["network_driver"])
+        for returned_device_ip, data in device_data.return_value.items():
+            device = Device.objects.get(serial=data["serial"])
+            self.assertEqual(device.name, data["hostname"])
+            self.assertEqual(device.serial, data["serial"])
+            self.assertEqual(device.device_type.model, data["device_type"])
+            self.assertEqual(device.device_type.manufacturer.name, data["manufacturer"])
+            self.assertEqual(device.platform.name, data["platform"])
+            self.assertEqual(device.platform.network_driver, data["network_driver"])
             self.assertEqual(device.primary_ip.host, returned_device_ip)
-            self.assertEqual(device.primary_ip.mask_length, device_data["mask_length"])
+            self.assertEqual(device.primary_ip.mask_length, data["mask_length"])
 
-            mgmt_interface = Interface.objects.get(device=device, name=device_data["mgmt_interface"])
+            mgmt_interface = Interface.objects.get(device=device, name=data["mgmt_interface"])
             self.assertEqual(mgmt_interface.mgmt_only, True)
             self.assertIn(returned_device_ip, list(mgmt_interface.ip_addresses.all().values_list("host", flat=True)))
 
@@ -76,7 +76,7 @@ class SSOTSyncDevicesTestCase(TransactionTestCase):
         )
         onboarding_job = jobs.SSOTSyncDevices()
         with open("nautobot_device_onboarding/tests/fixtures/onboarding_csv_fixture.csv", "rb") as csv_file:
-            processed_csv_data = onboarding_job._process_csv_data(csv_file=csv_file)
+            processed_csv_data = onboarding_job._process_csv_data(csv_file=csv_file)  # pylint: disable=protected-access
         self.assertEqual(processed_csv_data["10.1.1.10"]["location"], self.testing_objects["location_1"])
         self.assertEqual(processed_csv_data["10.1.1.10"]["namespace"], self.testing_objects["namespace"])
         self.assertEqual(processed_csv_data["10.1.1.10"]["port"], 22)
@@ -106,19 +106,17 @@ class SSOTSyncDevicesTestCase(TransactionTestCase):
     def test_process_csv_data__bad_file(self):
         """Test error checking of a bad CSV file used for onboarding jobs."""
         manufacturer, _ = Manufacturer.objects.get_or_create(name="Cisco")
-        platform, _ = Platform.objects.get_or_create(
-            name="cisco_ios", network_driver="cisco_ios", manufacturer=manufacturer
-        )
+        Platform.objects.get_or_create(name="cisco_ios", network_driver="cisco_ios", manufacturer=manufacturer)
         onboarding_job = jobs.SSOTSyncDevices()
         with open("nautobot_device_onboarding/tests/fixtures/onboarding_csv_fixture_bad_data.csv", "rb") as csv_file:
-            processed_csv_data = onboarding_job._process_csv_data(csv_file=csv_file)
+            processed_csv_data = onboarding_job._process_csv_data(csv_file=csv_file)  # pylint: disable=protected-access
         self.assertEqual(processed_csv_data, None)
 
     def test_process_csv_data__empty_file(self):
         """Test error checking of a bad CSV file used for onboarding jobs."""
         onboarding_job = jobs.SSOTSyncDevices()
         with open("nautobot_device_onboarding/tests/fixtures/onboarding_csv_fixture_empty.csv", "rb") as csv_file:
-            processed_csv_data = onboarding_job._process_csv_data(csv_file=csv_file)
+            processed_csv_data = onboarding_job._process_csv_data(csv_file=csv_file)  # pylint: disable=protected-access
         self.assertEqual(processed_csv_data, None)
 
 
@@ -159,11 +157,11 @@ class SSOTSyncNetworkDataTestCase(TransactionTestCase):
         )
 
         self.assertEqual(job_result.status, JobResultStatusChoices.STATUS_SUCCESS)
-        for returned_device_hostname, device_data in device_data.return_value.items():
-            device = Device.objects.get(serial=device_data["serial"])
+        for returned_device_hostname, data in device_data.return_value.items():
+            device = Device.objects.get(serial=data["serial"])
             self.assertEqual(device.name, returned_device_hostname)
             for interface in device.interfaces.all():
-                interface_data = device_data["interfaces"][interface.name]
+                interface_data = data["interfaces"][interface.name]
                 self.assertEqual(interface.status, self.testing_objects["status"])
                 self.assertEqual(interface.type, interface_data["type"])
                 self.assertEqual(interface.mac_address, interface_data["mac_address"])

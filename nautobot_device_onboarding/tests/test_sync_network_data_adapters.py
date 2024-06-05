@@ -21,7 +21,7 @@ class SyncNetworkDataNetworkAdapterTestCase(TransactionTestCase):
 
     databases = ("default", "job_logs")
 
-    def setUp(self):  # pylint: disable=invalid-na
+    def setUp(self):  # pylint: disable=invalid-name
         """Initialize test case."""
         # Setup Nautobot Objects
         self.testing_objects = utils.sync_network_data_ensure_required_nautobot_objects()
@@ -50,7 +50,9 @@ class SyncNetworkDataNetworkAdapterTestCase(TransactionTestCase):
         # Add a failed device to the mock returned data
         self.job.command_getter_result.update(sync_network_data_fixture.failed_device)
 
-        self.sync_network_data_adapter._handle_failed_devices(device_data=self.job.command_getter_result)
+        self.sync_network_data_adapter._handle_failed_devices(  # pylint: disable=protected-access
+            device_data=self.job.command_getter_result
+        )
         self.assertNotIn("demo-cisco-xe3", self.job.command_getter_result.keys())
 
     @patch("nautobot_device_onboarding.diffsync.adapters.sync_network_data_adapters.sync_network_data_command_getter")
@@ -86,7 +88,9 @@ class SyncNetworkDataNetworkAdapterTestCase(TransactionTestCase):
                 self.assertEqual(interface_name, diffsync_obj.name)
                 self.assertEqual(self.testing_objects["status"].name, diffsync_obj.status__name)
                 self.assertEqual(
-                    self.sync_network_data_adapter._process_mac_address(mac_address=interface_data["mac_address"]),
+                    self.sync_network_data_adapter._process_mac_address(  # pylint: disable=protected-access
+                        mac_address=interface_data["mac_address"]
+                    ),
                     diffsync_obj.mac_address,
                 )
                 self.assertEqual(interface_data["802.1Q_mode"], diffsync_obj.mode)
@@ -132,7 +136,7 @@ class SyncNetworkDataNetworkAdapterTestCase(TransactionTestCase):
     def test_load_vrfs(self):
         """Test loading vrf data returned from command getter into the diffsync store."""
         self.sync_network_data_adapter.load_vrfs()
-        for hostname, device_data in self.job.command_getter_result.items():
+        for _, device_data in self.job.command_getter_result.items():
             for _, interface_data in device_data["interfaces"].items():
                 if interface_data["vrf"]:
                     unique_id = f"{interface_data['vrf']['name']}__{self.job.namespace.name}"
@@ -206,7 +210,7 @@ class SyncNetworkDataNautobotAdapterTestCase(TransactionTestCase):
 
     databases = ("default", "job_logs")
 
-    def setUp(self):  # pylint: disable=invalid-na
+    def setUp(self):  # pylint: disable=invalid-name
         """Initialize test case."""
         # Setup Nautobot Objects
         self.testing_objects = utils.sync_network_data_ensure_required_nautobot_objects()
@@ -232,7 +236,9 @@ class SyncNetworkDataNautobotAdapterTestCase(TransactionTestCase):
 
     def test_cache_primary_ips(self):
         """Test IP Cache."""
-        self.sync_network_data_adapter._cache_primary_ips(device_queryset=self.job.devices_to_load)
+        self.sync_network_data_adapter._cache_primary_ips(  # pylint: disable=protected-access
+            device_queryset=self.job.devices_to_load
+        )
         for device in self.job.devices_to_load:
             self.assertEqual(self.sync_network_data_adapter.primary_ips[device.id], device.primary_ip.id)
 
@@ -336,7 +342,9 @@ class SyncNetworkDataNautobotAdapterTestCase(TransactionTestCase):
 
     def test_sync_complete(self):
         """Test primary ip re-assignment if deleted during the sync."""
-        self.sync_network_data_adapter._cache_primary_ips(device_queryset=self.job.devices_to_load)
+        self.sync_network_data_adapter._cache_primary_ips(  # pylint: disable=protected-access
+            device_queryset=self.job.devices_to_load
+        )
         for device in self.job.devices_to_load:
             device.primary_ip4 = None
             device.validated_save()
