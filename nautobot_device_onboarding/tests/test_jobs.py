@@ -4,12 +4,12 @@ from unittest.mock import patch
 
 from nautobot.apps.testing import create_job_result_and_run_job
 from nautobot.core.testing import TransactionTestCase
-from nautobot.dcim.models import Device, Interface, Platform, Manufacturer
+from nautobot.dcim.models import Device, Interface, Manufacturer, Platform
 from nautobot.extras.choices import JobResultStatusChoices
-from nautobot_device_onboarding.tests.fixtures import sync_devices_fixture, sync_network_data_fixture
-from nautobot_device_onboarding import jobs
 
+from nautobot_device_onboarding import jobs
 from nautobot_device_onboarding.tests import utils
+from nautobot_device_onboarding.tests.fixtures import sync_devices_fixture, sync_network_data_fixture
 
 
 class SSOTSyncDevicesTestCase(TransactionTestCase):
@@ -134,7 +134,7 @@ class SSOTSyncNetworkDataTestCase(TransactionTestCase):
     def test_sync_network_data__success(self, device_data):
         """Test a successful run of the 'Sync Network Data From Network' job"""
         device_data.return_value = sync_network_data_fixture.sync_network_mock_data_valid
-        devices = ["demo-cisco-xe1", "demo-cisco-xe2"]
+        devices = ["demo-cisco-1", "demo-cisco-2"]
         device_ids_to_sync = list(Device.objects.filter(name__in=devices).values_list("id", flat=True))
 
         job_form_inputs = {

@@ -1,12 +1,12 @@
 """Testing utilites."""
 
 from django.contrib.contenttypes.models import ContentType
-from nautobot.dcim.choices import InterfaceTypeChoices, InterfaceModeChoices
+from nautobot.dcim.choices import InterfaceModeChoices, InterfaceTypeChoices
 from nautobot.dcim.models import Device, DeviceType, Interface, Location, LocationType, Manufacturer, Platform
 from nautobot.extras.choices import SecretsGroupAccessTypeChoices, SecretsGroupSecretTypeChoices
 from nautobot.extras.models import Role, Secret, SecretsGroup, SecretsGroupAssociation, Status
 from nautobot.ipam.choices import IPAddressTypeChoices, PrefixTypeChoices
-from nautobot.ipam.models import IPAddress, IPAddressToInterface, Namespace, Prefix, VLAN, VRF
+from nautobot.ipam.models import VLAN, VRF, IPAddress, IPAddressToInterface, Namespace, Prefix
 
 
 def sync_network_data_ensure_required_nautobot_objects():
@@ -87,7 +87,7 @@ def sync_network_data_ensure_required_nautobot_objects():
 
     device_type, _ = DeviceType.objects.get_or_create(model="CSR1000V17", manufacturer=manufacturer)
     device_1, _ = Device.objects.get_or_create(
-        name="demo-cisco-xe1",
+        name="demo-cisco-1",
         serial="9ABUXU581111",
         device_type=device_type,
         status=status,
@@ -97,7 +97,7 @@ def sync_network_data_ensure_required_nautobot_objects():
         secrets_group=secrets_group,
     )
     device_2, _ = Device.objects.get_or_create(
-        name="demo-cisco-xe2",
+        name="demo-cisco-2",
         serial="9ABUXU5882222",
         device_type=device_type,
         status=status,
@@ -107,7 +107,7 @@ def sync_network_data_ensure_required_nautobot_objects():
         secrets_group=secrets_group,
     )
     device_3, _ = Device.objects.get_or_create(
-        name="demo-cisco-xe3",
+        name="demo-cisco-3",
         serial="9ABUXU5883333",
         device_type=device_type,
         status=status,
@@ -177,12 +177,19 @@ def sync_devices_ensure_required_nautobot_objects():
     status.content_types.add(ContentType.objects.get_for_model(Interface))
     status.validated_save()
 
+    status_planned, _ = Status.objects.get_or_create(name="Planned")
+    status_planned.content_types.add(ContentType.objects.get_for_model(Device))
+    status_planned.validated_save()
+
     username_secret, _ = Secret.objects.get_or_create(
         name="username", provider="environment-variable", parameters={"variable": "DEVICE_USER"}
     )
     password_secret, _ = Secret.objects.get_or_create(
         name="password", provider="environment-variable", parameters={"variable": "DEVICE_PASS"}
     )
+    secrets_group, _ = SecretsGroup.objects.get_or_create(name="test secrets group")
+    secrets_group_alternate, _ = SecretsGroup.objects.get_or_create(name="alternate secrets group")
+
     secrets_group, _ = SecretsGroup.objects.get_or_create(name="test secrets group")
     SecretsGroupAssociation.objects.get_or_create(
         secrets_group=secrets_group,
@@ -221,6 +228,10 @@ def sync_devices_ensure_required_nautobot_objects():
     device_role.content_types.add(ContentType.objects.get_for_model(Device))
     device_role.validated_save()
 
+    device_role_backup, _ = Role.objects.get_or_create(name="Backup")
+    device_role_backup.content_types.add(ContentType.objects.get_for_model(Device))
+    device_role_backup.validated_save()
+
     manufacturer, _ = Manufacturer.objects.get_or_create(name="Cisco")
 
     platform, _ = Platform.objects.get_or_create(
@@ -241,7 +252,7 @@ def sync_devices_ensure_required_nautobot_objects():
         secrets_group=secrets_group,
     )
     device_2, _ = Device.objects.get_or_create(
-        name="test device",
+        name="test device 2",
         serial="test-serial-123",
         device_type=device_type,
         status=status,
@@ -265,11 +276,14 @@ def sync_devices_ensure_required_nautobot_objects():
     device_2.validated_save()
 
     testing_objects["status"] = status
+    testing_objects["status_planned"] = status_planned
     testing_objects["secrets_group"] = secrets_group
+    testing_objects["secrets_group_alternate"] = secrets_group_alternate
     testing_objects["namespace"] = namespace
     testing_objects["location"] = location
     testing_objects["manufacturer"] = manufacturer
     testing_objects["device_role"] = device_role
+    testing_objects["device_role_backup"] = device_role_backup
     testing_objects["device_type"] = device_type
     testing_objects["platform"] = platform
     testing_objects["prefix"] = prefix

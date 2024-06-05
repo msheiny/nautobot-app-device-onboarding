@@ -311,6 +311,8 @@ class SyncDevicesDevice(DiffSyncModel):
                 )
         else:
             # Update the primary ip address only
+            # This edge case is unlikely to occur. A device with primary_ip that doesn't mach what was entered
+            # on the job form should be filtered out of the sync and later caught by _get_or_create_device()
             if attrs.get("primary_ip4__host"):
                 if not attrs.get("mask_length"):
                     attrs["mask_length"] = device.primary_ip4.mask_length

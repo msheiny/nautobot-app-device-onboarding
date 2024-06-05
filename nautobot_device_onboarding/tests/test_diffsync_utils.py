@@ -66,8 +66,8 @@ class TestDiffSyncUtils(TestCase):
         queryset = generate_device_queryset_from_command_getter_result(command_getter_result=self.command_getter_result)
         hostnames_list = list(queryset.values_list("name", flat=True))
         self.assertEqual(2, queryset.count())
-        self.assertIn("demo-cisco-xe1", hostnames_list)
-        self.assertIn("demo-cisco-xe2", hostnames_list)
+        self.assertIn("demo-cisco-1", hostnames_list)
+        self.assertIn("demo-cisco-2", hostnames_list)
 
     def test_check_data_type(self):
         """Test argument data type is a dict"""

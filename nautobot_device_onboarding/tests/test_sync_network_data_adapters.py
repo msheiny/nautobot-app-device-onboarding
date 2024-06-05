@@ -1,11 +1,11 @@
 """Test Cisco Support adapter."""
 
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
 
 from nautobot.core.testing import TransactionTestCase
 from nautobot.dcim.models import Device, Interface
-from nautobot.ipam.models import IPAddress, VLAN, VRF
 from nautobot.extras.models import JobResult
+from nautobot.ipam.models import VLAN, VRF, IPAddress
 
 from nautobot_device_onboarding.diffsync.adapters.sync_network_data_adapters import (
     SyncNetworkDataNautobotAdapter,
@@ -115,7 +115,7 @@ class SyncNetworkDataNetworkAdapterTestCase(TransactionTestCase):
 
     def test_load_vlans(self):
         """Test loading vlan data returned from command getter into the diffsync store."""
-        self.job.devices_to_load = Device.objects.filter(name__in=["demo-cisco-xe1", "demo-cisco-xe2"])
+        self.job.devices_to_load = Device.objects.filter(name__in=["demo-cisco-1", "demo-cisco-2"])
         self.sync_network_data_adapter.load_vlans()
 
         for _, device_data in self.job.command_getter_result.items():
@@ -230,7 +230,7 @@ class SyncNetworkDataNautobotAdapterTestCase(TransactionTestCase):
         self.job.sync_vlans = True
         self.job.sync_vrfs = True
         self.job.debug = True
-        self.job.devices_to_load = Device.objects.filter(name__in=["demo-cisco-xe1", "demo-cisco-xe2"])
+        self.job.devices_to_load = Device.objects.filter(name__in=["demo-cisco-1", "demo-cisco-2"])
 
         self.sync_network_data_adapter = SyncNetworkDataNautobotAdapter(job=self.job, sync=None)
 

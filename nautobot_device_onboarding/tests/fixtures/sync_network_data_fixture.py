@@ -1,7 +1,7 @@
 """Data fixture for use in testing."""
 
 sync_network_mock_data_valid = {
-    "demo-cisco-xe1": {
+    "demo-cisco-1": {
         "serial": "9ABUXU581111",
         "interfaces": {
             "GigabitEthernet1": {
@@ -93,7 +93,7 @@ sync_network_mock_data_valid = {
             },
         },
     },
-    "demo-cisco-xe2": {
+    "demo-cisco-2": {
         "serial": "9ABUXU5882222",
         "interfaces": {
             "GigabitEthernet1": {
@@ -158,4 +158,4 @@ sync_network_mock_data_valid = {
         },
     },
 }
-failed_device = {"demo-cisco-xe3": {"failed": True, "failed_reason": "Authentication failure"}}
+failed_device = {"demo-cisco-3": {"failed": True, "failed_reason": "Authentication failure"}}

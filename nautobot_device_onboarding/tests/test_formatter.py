@@ -4,8 +4,9 @@ import json
 import os
 import unittest
 from unittest.mock import patch
+
 import yaml
-from nornir.core.inventory import ConnectionOptions, Host, Defaults
+from nornir.core.inventory import ConnectionOptions, Defaults, Host
 
 from nautobot_device_onboarding.nornir_plays.formatter import extract_and_post_process, perform_data_extraction
 from nautobot_device_onboarding.nornir_plays.transform import add_platform_parsing_info

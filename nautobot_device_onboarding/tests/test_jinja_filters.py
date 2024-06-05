@@ -3,17 +3,17 @@
 import unittest
 import unittest.mock
 from nautobot_device_onboarding.jinja_filters import (
-    map_interface_type,
     extract_prefix,
-    interface_status_to_bool,
-    port_mode_to_nautobot,
-    key_exist_or_default,
-    flatten_list_of_dict_from_value,
     flatten_dict_from_value,
+    flatten_list_of_dict_from_value,
     get_entry_from_dict,
-    interface_mode_logic,
     get_vlan_data,
+    interface_mode_logic,
+    interface_status_to_bool,
+    key_exist_or_default,
+    map_interface_type,
     parse_junos_ip_address,
+    port_mode_to_nautobot,
 )
 
 
