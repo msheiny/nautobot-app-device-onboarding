@@ -93,6 +93,7 @@ class OnboardingTask(Job):  # pylint: disable=too-many-instance-attributes
         name = "Perform Device Onboarding (Original)"
         description = "Login to a device(s) and populate Nautobot Device object(s). This is the original Job as part of Device Onboarding initially created in 2021."
         has_sensitive_variables = False
+        hidden = True
 
     def __init__(self, *args, **kwargs):
         """Overload init to instantiate class attributes per W0201."""
