@@ -10,7 +10,6 @@ from diffsync.enum import DiffSyncFlags
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
-from django.forms import HiddenInput
 from nautobot.apps.jobs import BooleanVar, ChoiceVar, FileVar, IntegerVar, Job, MultiObjectVar, ObjectVar, StringVar
 from nautobot.core.celery import register_jobs
 from nautobot.dcim.models import Device, DeviceType, Location, Platform
@@ -533,8 +532,7 @@ class SSOTSyncNetworkData(DataSource):  # pylint: disable=too-many-instance-attr
 
     debug = BooleanVar(description="Enable for more verbose logging.")
     sync_vlans = BooleanVar(
-        default=False, description="Sync VLANs and interface VLAN assignments.", widget=HiddenInput()
-    )
+        default=False, description="Sync VLANs and interface VLAN assignments.")
     sync_vrfs = BooleanVar(default=False, description="Sync VRFs and interface VRF assignments.")
     namespace = ObjectVar(
         model=Namespace, required=True, description="The namespace for all IP addresses created or updated in the sync."
