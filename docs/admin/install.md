@@ -12,18 +12,8 @@ Here you will find detailed instructions on how to **install** and **configure**
 
 ### Access Requirements
 
-#### NAPALM Credentials
-
-The Onboarding App uses NAPALM. You can configure a default NAPALM username and password in `nautobot_config.py`.
-
-When `NAPALM_USERNAME`, `NAPALM_PASSWORD` and `NAPALM_ARGS` are configured in `nautobot_config.py`, the user does not have to use the Credentials/SecretGroup fields in the Device Onboarding job, unless they wish to override the values in `nautobot_config.py`:
-
-```python
-# Credentials that Nautobot will use to authenticate to devices when connecting via NAPALM.
-NAPALM_USERNAME = "<napalm username>"
-NAPALM_PASSWORD = "<napalm pwd>"
-NAPALM_ARGS = {"secret": "<enable secret pwd>"}
-```
+- The original OnboardingTask Job used NAPALM Credentials.
+- The new SSoT based jobs use Nautobot Secrets in a similar method to other apps. This is a more flexible and supportable way for the future.
 
 ## Install Guide
 
