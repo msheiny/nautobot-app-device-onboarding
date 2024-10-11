@@ -3,7 +3,8 @@
 from collections import defaultdict
 from typing import DefaultDict, Dict, FrozenSet, Hashable, Tuple, Type
 
-import diffsync
+from diffsync import Adapter
+from diffsync.exceptions import ObjectAlreadyExists
 import netaddr
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
@@ -17,7 +18,7 @@ from nautobot_device_onboarding.utils import diffsync_utils
 ParameterSet = FrozenSet[Tuple[str, Hashable]]
 
 
-class SyncDevicesNautobotAdapter(diffsync.Adapter):
+class SyncDevicesNautobotAdapter(Adapter):
     """Adapter for loading Nautobot data."""
 
     manufacturer = sync_devices_models.SyncDevicesManufacturer
@@ -145,7 +146,7 @@ class SyncDevicesNautobotAdapter(diffsync.Adapter):
         self.load_devices()
 
 
-class SyncDevicesNetworkAdapter(diffsync.Adapter):
+class SyncDevicesNetworkAdapter(Adapter):
     """Adapter for loading device data from a network."""
 
     manufacturer = sync_devices_models.SyncDevicesManufacturer
@@ -245,7 +246,7 @@ class SyncDevicesNetworkAdapter(diffsync.Adapter):
             if onboarding_manufacturer:
                 try:
                     self.add(onboarding_manufacturer)
-                except diffsync.ObjectAlreadyExists:
+                except ObjectAlreadyExists:
                     pass
 
     def load_platforms(self):
@@ -268,7 +269,7 @@ class SyncDevicesNetworkAdapter(diffsync.Adapter):
             if onboarding_platform:
                 try:
                     self.add(onboarding_platform)
-                except diffsync.ObjectAlreadyExists:
+                except ObjectAlreadyExists:
                     pass
 
     def load_device_types(self):
@@ -291,7 +292,7 @@ class SyncDevicesNetworkAdapter(diffsync.Adapter):
             if onboarding_device_type:
                 try:
                     self.add(onboarding_device_type)
-                except diffsync.ObjectAlreadyExists:
+                except ObjectAlreadyExists:
                     pass
 
     def _fields_missing_data(self, device_data, ip_address, platform):
@@ -373,7 +374,7 @@ class SyncDevicesNetworkAdapter(diffsync.Adapter):
                         self.add(onboarding_device)
                         if self.job.debug:
                             self.job.logger.debug(f"Device: {self.device_data[ip_address]['hostname']} loaded.")
-                    except diffsync.ObjectAlreadyExists:
+                    except ObjectAlreadyExists:
                         self.job.logger.error(
                             f"Device: {self.device_data[ip_address]['hostname']} has already been loaded! "
                             f"Duplicate devices will not be synced. "

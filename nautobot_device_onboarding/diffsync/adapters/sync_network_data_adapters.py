@@ -2,7 +2,8 @@
 
 import datetime
 
-import diffsync
+from diffsync import Adapter
+from diffsync.exceptions import ObjectAlreadyExists
 from diffsync.enum import DiffSyncModelFlags
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -119,7 +120,7 @@ class SyncNetworkDataNautobotAdapter(FilteredNautobotAdapter):
             try:
                 network_ip_address.model_flags = DiffSyncModelFlags.SKIP_UNMATCHED_DST
                 self.add(network_ip_address)
-            except diffsync.exceptions.ObjectAlreadyExists:
+            except ObjectAlreadyExists:
                 self.job.logger.warning(
                     f"{network_ip_address} is already loaded to the DiffSync store. This is a duplicate IP Address."
                 )
@@ -141,7 +142,7 @@ class SyncNetworkDataNautobotAdapter(FilteredNautobotAdapter):
             try:
                 network_vlan.model_flags = DiffSyncModelFlags.SKIP_UNMATCHED_DST
                 self.add(network_vlan)
-            except diffsync.exceptions.ObjectAlreadyExists:
+            except ObjectAlreadyExists:
                 pass
 
     def load_tagged_vlans_to_interface(self):
@@ -219,7 +220,7 @@ class SyncNetworkDataNautobotAdapter(FilteredNautobotAdapter):
             try:
                 network_vrf.model_flags = DiffSyncModelFlags.SKIP_UNMATCHED_DST
                 self.add(network_vrf)
-            except diffsync.exceptions.ObjectAlreadyExists:
+            except ObjectAlreadyExists:
                 continue
 
     def load_vrf_to_interface(self):
@@ -285,7 +286,7 @@ class SyncNetworkDataNautobotAdapter(FilteredNautobotAdapter):
                     network_cable.pk = cable.pk
                     if self.job.debug:
                         self.job.logger.debug(f"Loaded Cable: {network_cable}")
-                except diffsync.exceptions.ObjectAlreadyExists:
+                except ObjectAlreadyExists:
                     continue
 
     def load(self):
@@ -372,7 +373,7 @@ class MacUnixExpandedUppercase(mac_unix_expanded):
     word_fmt = "%.2X"
 
 
-class SyncNetworkDataNetworkAdapter(diffsync.Adapter):
+class SyncNetworkDataNetworkAdapter(Adapter):
     """Adapter for loading Network data."""
 
     def __init__(self, *args, job, sync=None, **kwargs):
@@ -543,7 +544,7 @@ class SyncNetworkDataNetworkAdapter(diffsync.Adapter):
                                     status__name=self.job.ip_address_status.name,
                                 )
                                 self.add(network_ip_address)
-                            except diffsync.exceptions.ObjectAlreadyExists:
+                            except ObjectAlreadyExists:
                                 self.job.logger.warning(
                                     f"{network_ip_address} is already loaded to the "
                                     "DiffSync store. This is a duplicate IP Address."
@@ -584,7 +585,7 @@ class SyncNetworkDataNetworkAdapter(diffsync.Adapter):
                             location__name=location_names.get(hostname, ""),
                         )
                         self.add(network_vlan)
-                    except diffsync.exceptions.ObjectAlreadyExists:
+                    except ObjectAlreadyExists:
                         continue
                     except Exception as err:  # pylint: disable=broad-exception-caught
                         self._handle_general_load_exception(
@@ -604,7 +605,7 @@ class SyncNetworkDataNetworkAdapter(diffsync.Adapter):
                             location__name=location_names.get(hostname, ""),
                         )
                         self.add(network_vlan)
-                    except diffsync.exceptions.ObjectAlreadyExists:
+                    except ObjectAlreadyExists:
                         continue
                     except Exception as err:  # pylint: disable=broad-exception-caught
                         self._handle_general_load_exception(
@@ -633,7 +634,7 @@ class SyncNetworkDataNetworkAdapter(diffsync.Adapter):
                             namespace__name=self.job.namespace.name,
                         )
                         self.add(network_vrf)
-                    except diffsync.exceptions.ObjectAlreadyExists:
+                    except ObjectAlreadyExists:
                         continue
                     except Exception as err:  # pylint: disable=broad-exception-caught
                         self._handle_general_load_exception(
@@ -844,7 +845,7 @@ class SyncNetworkDataNetworkAdapter(diffsync.Adapter):
                         self.add(network_cable)
                         if self.job.debug:
                             self.job.logger.debug(f"Loaded Cable: {network_cable}")
-                    except diffsync.exceptions.ObjectAlreadyExists:
+                    except ObjectAlreadyExists:
                         # object already in the diffsync store.
                         pass
             except KeyError as error:
