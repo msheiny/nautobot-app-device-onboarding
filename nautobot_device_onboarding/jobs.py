@@ -21,7 +21,7 @@ from nautobot.apps.jobs import (
     StringVar,
 )
 from nautobot.core.celery import register_jobs
-from nautobot.dcim.models import Device, DeviceType, Location, Platform
+from nautobot.dcim.models import Device, DeviceType, Location, LocationType, Platform
 from nautobot.extras.choices import (
     CustomFieldTypeChoices,
     SecretsGroupAccessTypeChoices,
@@ -60,6 +60,7 @@ from nautobot_device_onboarding.nornir_plays.inventory_creator import _set_inven
 from nautobot_device_onboarding.nornir_plays.logger import NornirLogger
 from nautobot_device_onboarding.nornir_plays.processor import TroubleshootingProcessor
 from nautobot_device_onboarding.utils.helper import onboarding_task_fqdn_to_ip
+from nautobot_device_onboarding.state_abbr import us_state_abbrev
 
 InventoryPluginRegister.register("empty-inventory", EmptyInventory)
 
@@ -172,9 +173,15 @@ class OnboardingTask(Job):  # pylint: disable=too-many-instance-attributes
             username=self.username,
             password=self.password,
             secret=self.secret,
-            napalm_driver=(self.platform.napalm_driver if self.platform and self.platform.napalm_driver else None),
+            napalm_driver=(
+                self.platform.napalm_driver
+                if self.platform and self.platform.napalm_driver
+                else None
+            ),
             optional_args=(
-                self.platform.napalm_args if self.platform and self.platform.napalm_args else settings.NAPALM_ARGS
+                self.platform.napalm_args
+                if self.platform and self.platform.napalm_args
+                else settings.NAPALM_ARGS
             ),
         )
         netdev.get_onboarding_facts()
@@ -185,10 +192,14 @@ class OnboardingTask(Job):  # pylint: disable=too-many-instance-attributes
             "netdev_mgmt_ip_address": address,
             "netdev_nb_location_name": self.location.name,
             "netdev_nb_device_type_name": self.device_type,
-            "netdev_nb_role_name": (self.role.name if self.role else PLUGIN_SETTINGS["default_device_role"]),
+            "netdev_nb_role_name": (
+                self.role.name if self.role else PLUGIN_SETTINGS["default_device_role"]
+            ),
             "netdev_nb_role_color": PLUGIN_SETTINGS["default_device_role_color"],
             "netdev_nb_platform_name": self.platform.name if self.platform else None,
-            "netdev_nb_credentials": (self.credentials if PLUGIN_SETTINGS["assign_secrets_group"] else None),
+            "netdev_nb_credentials": (
+                self.credentials if PLUGIN_SETTINGS["assign_secrets_group"] else None
+            ),
             # Kwargs discovered on the Onboarded Device:
             "netdev_hostname": netdev_dict["netdev_hostname"],
             "netdev_vendor": netdev_dict["netdev_vendor"],
@@ -216,7 +227,9 @@ class OnboardingTask(Job):  # pylint: disable=too-many-instance-attributes
     def _parse_credentials(self, credentials):
         """Parse and return dictionary of credentials."""
         if credentials:
-            self.logger.info("Attempting to parse credentials from selected SecretGroup")
+            self.logger.info(
+                "Attempting to parse credentials from selected SecretGroup"
+            )
             try:
                 self.username = credentials.get_secret_value(
                     access_type=SecretsGroupAccessTypeChoices.TYPE_GENERIC,
@@ -237,10 +250,14 @@ class OnboardingTask(Job):  # pylint: disable=too-many-instance-attributes
                 self.logger.exception(
                     "Unable to use SecretsGroup selected, ensure Access Type is set to Generic & at minimum Username & Password types are set."
                 )
-                raise OnboardException("fail-credentials - Unable to parse selected credentials.") from err
+                raise OnboardException(
+                    "fail-credentials - Unable to parse selected credentials."
+                ) from err
 
         else:
-            self.logger.info("Using napalm credentials configured in nautobot_config.py")
+            self.logger.info(
+                "Using napalm credentials configured in nautobot_config.py"
+            )
             self.username = settings.NAPALM_USERNAME
             self.password = settings.NAPALM_PASSWORD
             self.secret = settings.NAPALM_ARGS.get("secret", None)
@@ -278,7 +295,9 @@ class SSOTSyncDevices(DataSource):  # pylint: disable=too-many-instance-attribut
         query_params={"content_type": "dcim.device"},
         description="Assigned Location for all synced device(s)",
     )
-    namespace = ObjectVar(model=Namespace, required=False, description="Namespace ip addresses belong to.")
+    namespace = ObjectVar(
+        model=Namespace, required=False, description="Namespace ip addresses belong to."
+    )
     ip_addresses = StringVar(
         required=False,
         description="IP address or FQDN of the device to sync, specify in a comma separated list for multiple devices.",
@@ -374,7 +393,9 @@ class SSOTSyncDevices(DataSource):  # pylint: disable=too-many-instance-attribut
                     )
                 else:
                     query = query = f"location_name: {row.get('location_name')}"
-                    location = Location.objects.get(name=row["location_name"].strip(), parent=None)
+                    location = Location.objects.get(
+                        name=row["location_name"].strip(), parent=None
+                    )
                 query = f"device_role: {row.get('device_role_name')}"
                 device_role = Role.objects.get(
                     name=row["device_role_name"].strip(),
@@ -417,27 +438,47 @@ class SSOTSyncDevices(DataSource):  # pylint: disable=too-many-instance-attribut
                 processed_csv_data[row["ip_address_host"]] = {}
                 processed_csv_data[row["ip_address_host"]]["location"] = location
                 processed_csv_data[row["ip_address_host"]]["namespace"] = namespace
-                processed_csv_data[row["ip_address_host"]]["port"] = int(row["port"].strip())
-                processed_csv_data[row["ip_address_host"]]["timeout"] = int(row["timeout"].strip())
-                processed_csv_data[row["ip_address_host"]]["set_mgmt_only"] = set_mgmgt_only
-                processed_csv_data[row["ip_address_host"]]["update_devices_without_primary_ip"] = (
-                    update_devices_without_primary_ip
+                processed_csv_data[row["ip_address_host"]]["port"] = int(
+                    row["port"].strip()
                 )
+                processed_csv_data[row["ip_address_host"]]["timeout"] = int(
+                    row["timeout"].strip()
+                )
+                processed_csv_data[row["ip_address_host"]][
+                    "set_mgmt_only"
+                ] = set_mgmgt_only
+                processed_csv_data[row["ip_address_host"]][
+                    "update_devices_without_primary_ip"
+                ] = update_devices_without_primary_ip
                 processed_csv_data[row["ip_address_host"]]["device_role"] = device_role
-                processed_csv_data[row["ip_address_host"]]["device_status"] = device_status
-                processed_csv_data[row["ip_address_host"]]["interface_status"] = interface_status
-                processed_csv_data[row["ip_address_host"]]["ip_address_status"] = ip_address_status
-                processed_csv_data[row["ip_address_host"]]["secrets_group"] = secrets_group
+                processed_csv_data[row["ip_address_host"]][
+                    "device_status"
+                ] = device_status
+                processed_csv_data[row["ip_address_host"]][
+                    "interface_status"
+                ] = interface_status
+                processed_csv_data[row["ip_address_host"]][
+                    "ip_address_status"
+                ] = ip_address_status
+                processed_csv_data[row["ip_address_host"]][
+                    "secrets_group"
+                ] = secrets_group
                 processed_csv_data[row["ip_address_host"]]["platform"] = platform
 
                 # Prepare ids to send to the job in celery
                 self.task_kwargs_csv_data[row["ip_address_host"]] = {}
-                self.task_kwargs_csv_data[row["ip_address_host"]]["port"] = int(row["port"].strip())
-                self.task_kwargs_csv_data[row["ip_address_host"]]["timeout"] = int(row["timeout"].strip())
+                self.task_kwargs_csv_data[row["ip_address_host"]]["port"] = int(
+                    row["port"].strip()
+                )
+                self.task_kwargs_csv_data[row["ip_address_host"]]["timeout"] = int(
+                    row["timeout"].strip()
+                )
                 self.task_kwargs_csv_data[row["ip_address_host"]]["secrets_group"] = (
                     secrets_group.id if secrets_group else ""
                 )
-                self.task_kwargs_csv_data[row["ip_address_host"]]["platform"] = platform.id if platform else ""
+                self.task_kwargs_csv_data[row["ip_address_host"]]["platform"] = (
+                    platform.id if platform else ""
+                )
                 row_count += 1
             except ObjectDoesNotExist as err:
                 self.logger.error(f"(row {sum([row_count, 1])}), {err} {query}")
@@ -494,7 +535,9 @@ class SSOTSyncDevices(DataSource):  # pylint: disable=too-many-instance-attribut
                     "csv_file": self.task_kwargs_csv_data,
                 }
             else:
-                raise ValidationError(message="CSV check failed. No devices will be synced.")
+                raise ValidationError(
+                    message="CSV check failed. No devices will be synced."
+                )
 
         else:
             # Verify that all requried form inputs have been provided
@@ -512,13 +555,19 @@ class SSOTSyncDevices(DataSource):  # pylint: disable=too-many-instance-attribut
             }
 
             missing_required_inputs = [
-                form_field for form_field, input_value in required_inputs.items() if not input_value
+                form_field
+                for form_field, input_value in required_inputs.items()
+                if not input_value
             ]
             if not missing_required_inputs:
                 pass
             else:
-                self.logger.error(f"Missing requried inputs from job form: {missing_required_inputs}")
-                raise ValidationError(message=f"Missing required inputs {missing_required_inputs}")
+                self.logger.error(
+                    f"Missing requried inputs from job form: {missing_required_inputs}"
+                )
+                raise ValidationError(
+                    message=f"Missing required inputs {missing_required_inputs}"
+                )
 
             self.location = location
             self.namespace = namespace
@@ -572,9 +621,15 @@ class SSOTSyncNetworkData(DataSource):  # pylint: disable=too-many-instance-attr
         description = "Synchronize extended device attribute information into Nautobot from one or more network devices. Information includes Interfaces, IP Addresses, Prefixes, VLANs and VRFs."
 
     debug = BooleanVar(description="Enable for more verbose logging.")
-    sync_vlans = BooleanVar(default=False, description="Sync VLANs and interface VLAN assignments.")
-    sync_vrfs = BooleanVar(default=False, description="Sync VRFs and interface VRF assignments.")
-    sync_cables = BooleanVar(default=False, description="Sync cables between interfaces via a LLDP or CDP.")
+    sync_vlans = BooleanVar(
+        default=False, description="Sync VLANs and interface VLAN assignments."
+    )
+    sync_vrfs = BooleanVar(
+        default=False, description="Sync VRFs and interface VRF assignments."
+    )
+    sync_cables = BooleanVar(
+        default=False, description="Sync cables between interfaces via a LLDP or CDP."
+    )
     namespace = ObjectVar(
         model=Namespace,
         required=True,
@@ -627,7 +682,9 @@ class SSOTSyncNetworkData(DataSource):  # pylint: disable=too-many-instance-attr
         """Load network data adapter."""
         # do not load source data if the job form does not filter which devices to sync
         if self.filtered_devices:
-            self.source_adapter = SyncNetworkDataNetworkAdapter(job=self, sync=self.sync)
+            self.source_adapter = SyncNetworkDataNetworkAdapter(
+                job=self, sync=self.sync
+            )
             self.source_adapter.load()
 
     def load_target_adapter(self):
@@ -690,7 +747,9 @@ class SSOTSyncNetworkData(DataSource):  # pylint: disable=too-many-instance-attr
             if self.debug:
                 self.logger.debug("Custom field found or created")
         except Exception as err:  # pylint: disable=broad-exception-caught
-            self.logger.error(f"Failed to get or create last_network_data_sync custom field, {err}")
+            self.logger.error(
+                f"Failed to get or create last_network_data_sync custom field, {err}"
+            )
             return
 
         # Filter devices based on form input
@@ -706,7 +765,9 @@ class SSOTSyncNetworkData(DataSource):  # pylint: disable=too-many-instance-attr
         if device_filter:  # prevent all devices from being returned by an empty filter
             self.filtered_devices = Device.objects.filter(**device_filter)
         else:
-            self.logger.error("No device filter options were provided, no devices will be synced.")
+            self.logger.error(
+                "No device filter options were provided, no devices will be synced."
+            )
 
         # Stop the job if no devices are returned after filtering
         if not self.filtered_devices:
@@ -714,7 +775,9 @@ class SSOTSyncNetworkData(DataSource):  # pylint: disable=too-many-instance-attr
             return
 
         # Log the devices that will be synced
-        filtered_devices_names = list(self.filtered_devices.values_list("name", flat=True))
+        filtered_devices_names = list(
+            self.filtered_devices.values_list("name", flat=True)
+        )
         self.logger.info(f"{len(filtered_devices_names)} devices will be synced")
         if len(filtered_devices_names) <= 300:
             self.logger.info(f"Devices: {filtered_devices_names}")
@@ -780,21 +843,27 @@ class DeviceOnboardingTroubleshootingJob(Job):
                         entered_ip, platform, port, username, password
                     )
                     nornir_obj.inventory.hosts.update(single_host_inventory_constructed)
-                nr_with_processors = nornir_obj.with_processors([TroubleshootingProcessor(compiled_results)])
+                nr_with_processors = nornir_obj.with_processors(
+                    [TroubleshootingProcessor(compiled_results)]
+                )
                 if kwargs["ssot_job_type"] == "both":
                     kwargs.update({"sync_vrfs": True})
                     kwargs.update({"sync_vlans": True})
                     kwargs.update({"sync_cables": True})
                     nr_with_processors.run(
                         task=netmiko_send_commands,
-                        command_getter_yaml_data=nornir_obj.inventory.defaults.data["platform_parsing_info"],
+                        command_getter_yaml_data=nornir_obj.inventory.defaults.data[
+                            "platform_parsing_info"
+                        ],
                         command_getter_job="sync_devices",
                         logger=logger,
                         **kwargs,
                     )
                     nr_with_processors.run(
                         task=netmiko_send_commands,
-                        command_getter_yaml_data=nornir_obj.inventory.defaults.data["platform_parsing_info"],
+                        command_getter_yaml_data=nornir_obj.inventory.defaults.data[
+                            "platform_parsing_info"
+                        ],
                         command_getter_job="sync_network_data",
                         logger=logger,
                         **kwargs,
@@ -806,7 +875,9 @@ class DeviceOnboardingTroubleshootingJob(Job):
                         kwargs.update({"sync_cables": True})
                     nr_with_processors.run(
                         task=netmiko_send_commands,
-                        command_getter_yaml_data=nornir_obj.inventory.defaults.data["platform_parsing_info"],
+                        command_getter_yaml_data=nornir_obj.inventory.defaults.data[
+                            "platform_parsing_info"
+                        ],
                         command_getter_job=kwargs["ssot_job_type"],
                         logger=logger,
                         **kwargs,
@@ -817,10 +888,159 @@ class DeviceOnboardingTroubleshootingJob(Job):
         return f"Successfully ran the following commands: {', '.join(list(compiled_results.keys()))}"
 
 
+class LocationCSVImport(Job):
+    """Import Locations from a CSV"""
+
+    def __init__(self, *args, **kwargs):
+        """Initialize SSoTSyncDevices."""
+        super().__init__(*args, **kwargs)
+        self.job_results = {
+            "rows_processed": 0,
+            "created": 0,
+            "errors": 0,
+        }
+        self.us_state_abbrev = us_state_abbrev
+
+    class Meta:
+        """Metadata about this Job."""
+
+        name = "Import Locations from CSV"
+        description = "Import locations from a CSV file."
+
+    debug = BooleanVar(
+        default=False,
+        description="Enable for more verbose logging.",
+    )
+    csv_file = FileVar(
+        label="CSV File",
+        required=False,
+        description="CSV file containing location data",
+    )
+    location_status = ObjectVar(
+        model=Status,
+        query_params={"content_types": "dcim.location"},
+        description="Assigned to all created locations",
+    )
+
+    def parse_site_type(self, site_name):
+        """Given the name of a stie parse the type of site."""
+        site_type = None
+        site_type_identifier = site_name.split("-")[-1]
+
+        if site_type_identifier == "DC":
+            site_type = "Data Center"
+        elif site_type_identifier == "BR":
+            site_type = "Branch"
+        else:
+            self.logger.error(f"Error parsing site type from {site_name}")
+            raise ValidationError(
+                "Failed to parse either 'DC' or 'BR' from site name."
+            )
+        return site_type
+
+    def run(
+        self, csv_file, debug, location_status, *args, **kwargs
+    ):  # pragma: no cover
+        """Run the job."""
+        self.debug = debug
+        self.csv_file = csv_file
+        self.location_status = location_status
+
+        # Validate location types
+        missing_location_types = []
+        location_type_map = {
+            "City": None,
+            "State": None,
+            "Data Center": None,
+            "Branch": None,
+        }
+        for location_type_name in location_type_map.keys():
+            try:
+                location_type_obj = LocationType.objects.get(name=location_type_name)
+                location_type_map[location_type_name] = location_type_obj
+            except ObjectDoesNotExist:
+                missing_location_types.append(location_type_name)
+        if missing_location_types:
+            self.logger.error(
+                f"Error, missing expected location type(s) {missing_location_types}"
+            )
+            return self.job_results
+
+        # Decode CSV file and get or create locations
+        decoded_csv_file = csv_file.read().decode("utf-8")
+        csv_reader = csv.DictReader(StringIO(decoded_csv_file))
+        row_count = 1
+        for row in csv_reader:
+            if self.debug:
+                self.logger.debug(row)
+            try:
+                site_name = row.get("name")
+                state_name = row.get("state")
+                city_name = row.get("city")
+                site_type_name = self.parse_site_type(site_name)
+
+                # Convert state abbreviations into full state names
+                if self.us_state_abbrev.get(state_name):
+                    state_name = self.us_state_abbrev.get(state_name)
+
+                Location.objects.get(
+                    name=site_name,
+                    parent__name=city_name,
+                    parent__parent__name=state_name,
+                )
+                if self.debug:
+                    self.logger.debug(
+                        f"Location already exists, Row: {row_count}, "
+                        f"Name: {row.get('name')}, "
+                        f"City: {row.get('city')}, "
+                        f"State: {row.get('state')}"
+                    )
+                row_count += 1
+                self.job_results["rows_processed"] += 1
+                continue
+            except ObjectDoesNotExist:
+                state_location, _ = Location.objects.get_or_create(
+                    name=state_name,
+                    location_type=location_type_map["State"],
+                    status=location_status,
+                )
+                city_location, _ = Location.objects.get_or_create(
+                    name=city_name,
+                    location_type=location_type_map["City"],
+                    parent=state_location,
+                    status=location_status,
+                )
+                site_location, _ = Location.objects.get_or_create(
+                    name=site_name,
+                    location_type=location_type_map[site_type_name],
+                    parent=city_location,
+                    status=location_status,
+                )
+                if self.debug:
+                    self.logger.debug(
+                        f"Created Location, "
+                        f"Name: {site_location.name}, "
+                        f"City: {site_location.parent.name}, "
+                        f"State: {site_location.parent.parent.name}"
+                    )
+                row_count += 1
+                self.job_results["created"] += 1
+                self.job_results["rows_processed"] += 1
+            except Exception as err:
+                self.job_results["errors"] += 1
+                self.logger.error(f"ROW: {row_count} Failure reading data, {err}")
+                continue
+            if row_count <= 1:
+                self.logger.error("The CSV file is empty!")
+                return self.job_results
+        return self.job_results
+
+
 jobs = [
     OnboardingTask,
     SSOTSyncDevices,
     SSOTSyncNetworkData,
     DeviceOnboardingTroubleshootingJob,
+    LocationCSVImport,
 ]
 register_jobs(*jobs)
