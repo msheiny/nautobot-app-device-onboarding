@@ -1,0 +1,36 @@
+{
+    "cookiecutter": {
+        "codeowner_github_usernames": "@mzbroch @scetron @glennmatthews @chadell",
+        "full_name": "Network to Code, LLC",
+        "email": "info@networktocode.com",
+        "github_org": "nautobot",
+        "app_name": "nautobot_device_onboarding",
+        "verbose_name": "Device Onboarding",
+        "app_slug": "nautobot-device-onboarding",
+        "project_slug": "nautobot-app-device-onboarding",
+        "repo_url": "https://github.com/nautobot/nautobot-app-device-onboarding",
+        "base_url": "nautobot-device-onboarding",
+        "min_nautobot_version": "2.0.3",
+        "max_nautobot_version": "2.9999",
+        "camel_name": "NautobotDeviceOnboarding",
+        "project_short_description": "Device Onboarding",
+        "model_class_name": "None",
+        "open_source_license": "Apache-2.0",
+        "docs_base_url": "https://docs.nautobot.com",
+        "docs_app_url": "https://docs.nautobot.com/projects/device-onboarding/en/latest",
+        "_drift_manager": {
+            "template": "https://github.com/nautobot/cookiecutter-nautobot-app.git",
+            "template_dir": "nautobot-app",
+            "template_ref": "refs/tags/nautobot-app-v2.4.1",
+            "cookie_dir": "",
+            "branch_prefix": "drift-manager",
+            "pull_request_strategy": "create",
+            "post_actions": [
+                "ruff",
+                "poetry"
+            ],
+            "draft": false,
+            "baked_commit_ref": "860a6ce04937705d0ccc7d3be6578489b9c58a69"
+        }
+    }
+}

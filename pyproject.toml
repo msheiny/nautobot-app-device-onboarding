@@ -1,88 +1,97 @@
 [tool.poetry]
 name = "nautobot-device-onboarding"
-version = "1.1.1"
-description = "A plugin for Nautobot to easily onboard new devices."
-authors = ["Network to Code, LLC <opensource@networktocode.com>"]
+version = "4.2.1a0"
+description = "A app for Nautobot to easily onboard new devices."
+authors = ["Network to Code, LLC <info@networktocode.com>"]
 license = "Apache-2.0"
 readme = "README.md"
-homepage = "https://github.com/nautobot/nautobot-plugin-device-onboarding"
-repository = "https://github.com/nautobot/nautobot-plugin-device-onboarding"
-keywords = ["nautobot", "network", "onboarding", "django"]
-include = [
-    "LICENSE",
-    "README.md",
-    "docs/images/*",
+homepage = "https://github.com/nautobot/nautobot-app-device-onboarding"
+repository = "https://github.com/nautobot/nautobot-app-device-onboarding"
+keywords = ["nautobot", "nautobot-app", "nautobot-plugin"]
+classifiers = [
+    "Intended Audience :: Developers",
+    "Development Status :: 5 - Production/Stable",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
 ]
 packages = [
     { include = "nautobot_device_onboarding" },
 ]
+include = [
+    # Poetry by default will exclude files that are in .gitignore
+    "nautobot_device_onboarding/static/nautobot_device_onboarding/docs/**/*",
+]
 
 [tool.poetry.dependencies]
-python = "^3.6"
-napalm = ">=2.5.0, <4"
+python = ">=3.8,<3.13"
+napalm = ">=2.5.0, <5"
 zipp = "^3.4.0"
-nautobot = ">=1.0.0"
+nautobot = "^2.2.3"
+nautobot-ssot = "^3.0.0"
+nautobot-plugin-nornir = "^2.0.0"
+jdiff = "^0.0.6"
+ntc-templates = "^7.0.0"
+# Netutils pin is needed for https://github.com/networktocode/netutils/pull/553
+netutils = "^1.9.1"
+ttp = "^0.9.0"
 
-[tool.poetry.dev-dependencies]
-invoke = "~1.5.0"
-black = "^20.8b1"
-flake8 = "~3.9.1"
-yamllint = "*"
-bandit = "*"
+[tool.poetry.group.dev.dependencies]
+coverage = "*"
+django-debug-toolbar = "*"
+invoke = "*"
+ipython = "*"
 pylint = "*"
 pylint-django = "*"
-pydocstyle = "*"
-django-debug-toolbar = "~3.2.1"
+pylint-nautobot = "*"
+ruff = "0.5.5"
+yamllint = "*"
+toml = "*"
+Markdown = "*"
+# Render custom markdown for version added/changed/remove notes
+markdown-version-annotations = "1.0.1"
+# Rendering docs to HTML
+mkdocs = "1.6.0"
+# Material for MkDocs theme
+mkdocs-material = "9.5.32"
+# Automatic documentation from sources, for MkDocs
+mkdocstrings = "0.25.2"
+mkdocstrings-python = "1.10.8"
+griffe = "1.1.1"
+towncrier = "~23.6.0"
 
-[tool.black]
-line-length = 120
-target-version = ['py36']
-include = '\.pyi?$'
-exclude = '''
-(
-  /(
-      \.eggs         # exclude a few common directories in the
-    | \.git          # root of the project
-    | \.hg
-    | \.mypy_cache
-    | \.tox
-    | \.venv
-    | _build
-    | buck-out
-    | build
-    | dist
-  )/
-  | settings.py     # This is where you define files that should not be stylized by black
-                     # the root of the project
-)
-'''
+[tool.poetry.extras]
+all = [
+]
 
 [tool.pylint.master]
 # Include the pylint_django plugin to avoid spurious warnings about Django patterns
-load-plugins="pylint_django"
-
-# Don't cache data for later comparisons
-persistent="no"
+load-plugins = "pylint_django, pylint_nautobot"
+ignore = ".venv"
 
 [tool.pylint.basic]
 # No docstrings required for private methods (Pylint default), or for test_ functions, or for inner Meta classes.
-no-docstring-rgx="^(_|test_|Meta$)"
-# Allow "ot" (OnboardingTask instance) as an acceptable variable name
-good-names="ot,"
+no-docstring-rgx = "^(_|test_|Meta$)"
 
 [tool.pylint.messages_control]
-# Line length is enforced by Black, so pylint doesn't need to check it.
-# Pylint and Black disagree about how to format multi-line arrays; Black wins.
-# Disabled due to noise: too-few-public-methods, too-many-ancestors, too-many-instance-attributes
 disable = """,
+    arguments-differ,
     line-too-long,
-    bad-continuation,
+    duplicate-code,
+    logging-fstring-interpolation,
     too-few-public-methods,
     too-many-ancestors,
-    too-many-instance-attributes,
-    duplicate-code,
-    raise-missing-from,
-    super-with-arguments
+    too-many-arguments,
+    too-many-branches,
+    too-many-lines,
+    too-many-locals,
+    too-many-public-methods,
+    too-many-statements,
+    unused-argument,
+    unused-import,
     """
 
 [tool.pylint.miscellaneous]
@@ -92,7 +101,106 @@ notes = """,
     XXX,
     """
 
-[build-system]
-requires = ["poetry>=0.12"]
-build-backend = "poetry.masonry.api"
+[tool.pylint-nautobot]
+supported_nautobot_versions = [
+    "2.0.3"
+]
 
+[tool.ruff]
+line-length = 120
+target-version = "py38"
+
+[tool.ruff.lint]
+select = [
+    "D",  # pydocstyle
+    "F", "E", "W",  # flake8
+    "S",  # bandit
+    "I",  # isort
+]
+ignore = [
+    # warning: `one-blank-line-before-class` (D203) and `no-blank-line-before-class` (D211) are incompatible.
+    "D203", # 1 blank line required before class docstring
+
+    # D212 is enabled by default in google convention, and complains if we have a docstring like:
+    # """
+    # My docstring is on the line after the opening quotes instead of on the same line as them.
+    # """
+    # We've discussed and concluded that we consider this to be a valid style choice.
+    "D212", # Multi-line docstring summary should start at the first line
+    "D213", # Multi-line docstring summary should start at the second line
+
+    # Produces a lot of issues in the current codebase.
+    "D401", # First line of docstring should be in imperative mood
+    "D407", # Missing dashed underline after section
+    "D416", # Section name ends in colon
+    "E501", # Line too long
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"nautobot_device_onboarding/migrations/*" = [
+    "D",
+]
+"nautobot_device_onboarding/tests/*" = [
+    "D",
+    "S"
+]
+
+[build-system]
+requires = ["poetry_core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.towncrier]
+package = "nautobot"
+directory = "changes"
+filename = "docs/admin/release_notes/version_X.Y.md"
+template = "development/towncrier_template.j2"
+start_string = "<!-- towncrier release notes start -->"
+issue_format = "[#{issue}](https://github.com/nautobot/nautobot-app-device-onboarding/issues/{issue})"
+
+[[tool.towncrier.type]]
+directory = "security"
+name = "Security"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "added"
+name = "Added"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "changed"
+name = "Changed"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "deprecated"
+name = "Deprecated"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "removed"
+name = "Removed"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "fixed"
+name = "Fixed"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "dependencies"
+name = "Dependencies"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "documentation"
+name = "Documentation"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "housekeeping"
+name = "Housekeeping"
+showcontent = true

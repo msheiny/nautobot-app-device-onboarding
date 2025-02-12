@@ -1,34 +1,26 @@
-"""Plugin declaration for nautobot_device_onboarding.
+"""App declaration for nautobot_device_onboarding."""
 
-(c) 2020-2021 Network To Code
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-  http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-"""
+# Metadata is inherited from Nautobot. If not including Nautobot in the environment, this should be added
+from importlib import metadata
 
-__version__ = "1.1.1"
+from nautobot.apps import NautobotAppConfig
 
-from nautobot.extras.plugins import PluginConfig
+__version__ = metadata.version(__name__)
 
 
-class OnboardingConfig(PluginConfig):
-    """Plugin configuration for the nautobot_device_onboarding plugin."""
+class NautobotDeviceOnboardingConfig(NautobotAppConfig):
+    """App configuration for the nautobot_device_onboarding app."""
 
     name = "nautobot_device_onboarding"
     verbose_name = "Device Onboarding"
     version = __version__
-    min_version = "1.0.0"
-    author = "Network to Code"
-    author_email = "opensource@networktocode.com"
-    description = "A plugin for Nautobot to easily onboard new devices."
-    base_url = "device-onboarding"
+    author = "Network to Code, LLC"
+    description = "Nautobot App that simplifies device onboarding (and re-onboarding) by \
+                   collecting and populating common device 'facts' into Nautobot."
+    base_url = "nautobot-device-onboarding"
     required_settings = []
+    min_version = "2.1.1"
+    max_version = "2.9999"
     default_settings = {
         "create_platform_if_missing": True,
         "create_manufacturer_if_missing": True,
@@ -44,12 +36,16 @@ class OnboardingConfig(PluginConfig):
         "skip_device_type_on_update": False,
         "skip_manufacturer_on_update": False,
         "platform_map": {},
+        "assign_secrets_group": False,
+        "set_management_only_interface": False,
         "onboarding_extensions_map": {
             "ios": "nautobot_device_onboarding.onboarding_extensions.ios",
         },
         "object_match_strategy": "loose",
     }
     caching_config = {}
+    docs_view_name = "plugins:nautobot_device_onboarding:docs"
+    home_view_name = "extras:job_list"  # Jobs only for now. May change in the future.
 
 
-config = OnboardingConfig  # pylint:disable=invalid-name
+config = NautobotDeviceOnboardingConfig  # pylint:disable=invalid-name

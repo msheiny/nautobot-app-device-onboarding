@@ -1,38 +1,22 @@
-"""Django urlpatterns declaration for nautobot_device_onboarding plugin.
+"""Django urlpatterns declaration for nautobot_device_onboarding app."""
 
-(c) 2020-2021 Network To Code
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-  http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-"""
+from django.templatetags.static import static
 from django.urls import path
-from nautobot.extras.views import ObjectChangeLogView
+from django.views.generic import RedirectView
+from nautobot.apps.urls import NautobotUIViewSetRouter
 
-from .models import OnboardingTask
-from .views import (
-    OnboardingTaskView,
-    OnboardingTaskListView,
-    OnboardingTaskCreateView,
-    OnboardingTaskBulkDeleteView,
-    OnboardingTaskFeedBulkImportView,
-)
+# Uncomment the following line if you have views to import
+# from nautobot_device_onboarding import views
+
+
+router = NautobotUIViewSetRouter()
+
+# Here is an example of how to register a viewset, you will want to replace views.NautobotDeviceOnboardingUIViewSet with your viewset
+# router.register("nautobot_device_onboarding", views.NautobotDeviceOnboardingUIViewSet)
+
 
 urlpatterns = [
-    path("", OnboardingTaskListView.as_view(), name="onboardingtask_list"),
-    path("<uuid:pk>/", OnboardingTaskView.as_view(), name="onboardingtask"),
-    path("add/", OnboardingTaskCreateView.as_view(), name="onboardingtask_add"),
-    path("delete/", OnboardingTaskBulkDeleteView.as_view(), name="onboardingtask_bulk_delete"),
-    path("import/", OnboardingTaskFeedBulkImportView.as_view(), name="onboardingtask_import"),
-    path(
-        "<uuid:pk>/changelog/",
-        ObjectChangeLogView.as_view(),
-        name="onboardingtask_changelog",
-        kwargs={"model": OnboardingTask},
-    ),
+    path("docs/", RedirectView.as_view(url=static("nautobot_device_onboarding/docs/index.html")), name="docs"),
 ]
+
+urlpatterns += router.urls

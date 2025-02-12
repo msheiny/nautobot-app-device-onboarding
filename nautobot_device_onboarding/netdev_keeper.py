@@ -1,16 +1,4 @@
-"""NetDev Keeper.
-
-(c) 2020-2021 Network To Code
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-  http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-"""
+"""NetDev Keeper."""
 
 import importlib
 import logging
@@ -18,18 +6,15 @@ import socket
 
 from django.conf import settings
 from napalm import get_network_driver
-from napalm.base.exceptions import ConnectionException, CommandErrorException
+from napalm.base.exceptions import CommandErrorException, ConnectionException
 from napalm.base.netmiko_helpers import netmiko_args
-from netmiko.ssh_autodetect import SSHDetect
-from netmiko.ssh_exception import NetMikoAuthenticationException
-from netmiko.ssh_exception import NetMikoTimeoutException
+from nautobot.dcim.models import Platform
+from netmiko import NetMikoAuthenticationException, NetMikoTimeoutException, SSHDetect
 from paramiko.ssh_exception import SSHException
 
-from nautobot.dcim.models import Platform
-
+from nautobot_device_onboarding.constants import NETMIKO_TO_NAPALM_STATIC
+from nautobot_device_onboarding.exceptions import OnboardException
 from nautobot_device_onboarding.onboarding.onboarding import StandaloneOnboarding
-from .constants import NETMIKO_TO_NAPALM_STATIC
-from .exceptions import OnboardException
 
 logger = logging.getLogger("rq.worker")
 
@@ -60,7 +45,7 @@ def get_mgmt_info(
     return default_mgmt_if, default_mgmt_pfxlen
 
 
-class NetdevKeeper:
+class NetdevKeeper:  # pylint: disable=too-many-instance-attributes
     """Used to maintain information about the network device during the onboarding process."""
 
     def __init__(  # pylint: disable=R0913
@@ -105,7 +90,7 @@ class NetdevKeeper:
         elif optional_args is None:
             self.optional_args = {}
         else:
-            raise OnboardException(reason="fail-general", message="Optional arguments should be None or a dict")
+            raise OnboardException("fail-general - Optional arguments should be None or a dict")
 
         self.facts = None
         self.ip_ifs = None
@@ -133,10 +118,8 @@ class NetdevKeeper:
             sock.settimeout(self.timeout)
             sock.connect((self.hostname, self.port))
 
-        except (socket.error, socket.timeout, ConnectionError):
-            raise OnboardException(
-                reason="fail-connect", message=f"ERROR device unreachable: {self.hostname}:{self.port}"
-            )
+        except (socket.error, socket.timeout, ConnectionError) as err:
+            raise OnboardException(f"fail-connect - ERROR device unreachable: {self.hostname}:{self.port}") from err
 
     def guess_netmiko_device_type(self):
         """Guess the device type of host, based on Netmiko."""
@@ -169,22 +152,19 @@ class NetdevKeeper:
 
         except NetMikoAuthenticationException as err:
             logger.error("ERROR %s", err)
-            raise OnboardException(reason="fail-login", message=f"ERROR: {str(err)}")
+            raise OnboardException(f"fail-login - ERROR: {str(err)}") from err
 
         except (NetMikoTimeoutException, SSHException) as err:
             logger.error("ERROR: %s", str(err))
-            raise OnboardException(reason="fail-connect", message=f"ERROR: {str(err)}")
+            raise OnboardException(f"fail-connect - ERROR: {str(err)}") from err
 
         except Exception as err:
             logger.error("ERROR: %s", str(err))
-            raise OnboardException(reason="fail-general", message=f"ERROR: {str(err)}")
+            raise OnboardException(f"fail-general - ERROR: {str(err)}") from err
 
-        else:
-            if guessed_device_type is None:
-                logger.error("ERROR: Could not detect device type with SSHDetect")
-                raise OnboardException(
-                    reason="fail-general", message="ERROR: Could not detect device type with SSHDetect"
-                )
+        if guessed_device_type is None:
+            logger.error("ERROR: Could not detect device type with SSHDetect")
+            raise OnboardException("fail-general - ERROR: Could not detect device type with SSHDetect")
 
         return guessed_device_type
 
@@ -197,7 +177,7 @@ class NetdevKeeper:
             self.netmiko_device_type = netmiko_device_type
 
             platform_to_napalm_nautobot = {
-                platform.slug: platform.napalm_driver for platform in Platform.objects.all() if platform.napalm_driver
+                platform: platform.napalm_driver for platform in Platform.objects.all() if platform.napalm_driver
             }
 
             # Update Constants if Napalm driver is defined for Nautobot Platform
@@ -209,8 +189,7 @@ class NetdevKeeper:
         """Checks for napalm driver name."""
         if not self.napalm_driver:
             raise OnboardException(
-                reason="fail-general",
-                message=f"Onboarding for Platform {self.netmiko_device_type} not "
+                f"fail-general - Onboarding for Platform {self.netmiko_device_type} not "
                 f"supported, as it has no specified NAPALM driver",
             )
 
@@ -273,13 +252,12 @@ class NetdevKeeper:
                     driver_addon_class = module.OnboardingDriverExtensions(napalm_device=napalm_device)
                     self.onboarding_class = driver_addon_class.onboarding_class
                     self.driver_addon_result = driver_addon_class.ext_result
-                except ModuleNotFoundError:
+                except ModuleNotFoundError as err:
                     raise OnboardException(
-                        reason="fail-general",
-                        message=f"ERROR: ModuleNotFoundError: Onboarding extension for napalm driver {self.napalm_driver} configured but can not be imported per configuration",
-                    )
-                except ImportError as exc:
-                    raise OnboardException(reason="fail-general", message="ERROR: ImportError: %s" % exc.args[0])
+                        f"fail-general - ERROR: ModuleNotFoundError: Onboarding extension for napalm driver {self.napalm_driver} configured but can not be imported per configuration",
+                    ) from err
+                except ImportError as err:
+                    raise OnboardException(f"fail-general - ERROR: ImportError: {err.args[0]}") from err
             elif module_name and not self.load_driver_extension:
                 logger.info("INFO: Skipping execution of driver extension")
             else:
@@ -287,15 +265,16 @@ class NetdevKeeper:
                     "INFO: No onboarding extension defined for napalm driver %s, using default napalm driver",
                     self.napalm_driver,
                 )
+            napalm_device.close()
 
-        except ConnectionException as exc:
-            raise OnboardException(reason="fail-login", message=exc.args[0])
+        except ConnectionException as err:
+            raise OnboardException(f"fail-login - {err.args[0]}") from err
 
-        except CommandErrorException as exc:
-            raise OnboardException(reason="fail-execute", message=exc.args[0])
+        except CommandErrorException as err:
+            raise OnboardException(f"fail-execute - {err.args[0]}") from err
 
-        except Exception as exc:
-            raise OnboardException(reason="fail-general", message=str(exc))
+        except Exception as err:
+            raise OnboardException(f"fail-general - {str(err)}") from err
 
     def get_netdev_dict(self):
         """Construct network device dict."""
